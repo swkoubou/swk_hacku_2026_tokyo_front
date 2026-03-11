@@ -12,6 +12,8 @@ import android.speech.SpeechRecognizer
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import android.view.MotionEvent
+import android.annotation.SuppressLint
 
 class VoiceRecognition : AppCompatActivity() {
 
@@ -89,8 +91,9 @@ class VoiceRecognition : AppCompatActivity() {
                     }
                     return
                 }
-                resultText.text = "Error: $error"
+                resultText.text = getString(R.string.error_message, error)
             }
+            @SuppressLint("SetTextI18n")
             override fun onPartialResults(partialResults: Bundle?) {
                 val matches =
                     partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
@@ -102,18 +105,33 @@ class VoiceRecognition : AppCompatActivity() {
             override fun onEvent(eventType: Int, params: Bundle?) {}
         })
 
-        button.setOnClickListener {
+        @SuppressLint("ClickableViewAccessibility")
+        button.setOnTouchListener { v, event ->
 
-            if (!isListening) {
-                speechRecognizer.startListening(intent)
-                button.text = "終了"
-                isListening = true
-            } else {
-                speechRecognizer.stopListening()
-                button.text = "開始"
-                isListening = false
-                finalText = ""
+            when (event.action) {
+
+                MotionEvent.ACTION_DOWN -> {
+
+                    finalText = ""
+                    resultText.text = ""
+
+                    speechRecognizer.startListening(intent)
+                    button.text = "認識中"
+                    isListening = true
+                }
+
+                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_CANCEL -> {
+
+                    speechRecognizer.stopListening()
+                    button.text = "長押しして話す"
+                    isListening = false
+
+                    v.performClick()
+                }
             }
+
+            false
         }
     }
 }
