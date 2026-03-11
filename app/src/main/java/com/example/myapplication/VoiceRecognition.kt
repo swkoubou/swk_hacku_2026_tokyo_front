@@ -21,6 +21,7 @@ class VoiceRecognition : AppCompatActivity() {
     private lateinit var resultText: TextView
     private var isListening = false
     private var finalText = ""
+    private val messageAnalysis = MessageAnalysis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +60,7 @@ class VoiceRecognition : AppCompatActivity() {
         speechRecognizer.setRecognitionListener(object : RecognitionListener {
 
             override fun onResults(results: Bundle) {
+
                 val matches =
                     results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
 
@@ -69,17 +71,17 @@ class VoiceRecognition : AppCompatActivity() {
                 }
 
                 resultText.text = finalText
-
-                if (isListening) {
-                    speechRecognizer.startListening(intent)
-                }
             }
 
             override fun onReadyForSpeech(params: Bundle?) {}
             override fun onBeginningOfSpeech() {}
             override fun onRmsChanged(rmsdB: Float) {}
             override fun onBufferReceived(buffer: ByteArray?) {}
-            override fun onEndOfSpeech() {}
+            override fun onEndOfSpeech() {
+                if (isListening) {
+                    speechRecognizer.startListening(intent)
+                }
+            }
             override fun onError(error: Int) {
                 if (
                     error == SpeechRecognizer.ERROR_CLIENT ||
@@ -126,6 +128,12 @@ class VoiceRecognition : AppCompatActivity() {
                     speechRecognizer.stopListening()
                     button.text = "長押しして話す"
                     isListening = false
+
+                    messageAnalysis.messageAnalysisLv1(finalText) { response ->
+                        runOnUiThread {
+                            resultText.text = response
+                        }
+                    }
 
                     v.performClick()
                 }
