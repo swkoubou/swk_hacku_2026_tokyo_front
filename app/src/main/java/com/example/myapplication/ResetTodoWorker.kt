@@ -20,6 +20,8 @@ class ResetTodoWorker(
             .putBoolean("step1", false)
             .putBoolean("step2", false)
             .putBoolean("step3", false)
+            .putBoolean("step4", false)
+            .putBoolean("step5", false)
             .apply()
 
         return Result.success()
