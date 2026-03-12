@@ -5,6 +5,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.IOException
+import com.google.gson.Gson
 
 class MessageAnalysis {
     private val client = OkHttpClient()
@@ -13,7 +14,7 @@ class MessageAnalysis {
     // 関数名:messageAnalysisLv1
     // 処理:受け取ったメッセージをlv1 APIへ送信し、そのレスポンスを受け取る
     //----------------------------------------------------------
-    fun messageAnalysisLv1(text: String, callback: (String) -> Unit) {
+    fun messageAnalysisLv1(text: String, callback: (AnalysisResponse) -> Unit) {
 
         val json = JSONObject()
         json.put("message", text)
@@ -39,9 +40,40 @@ class MessageAnalysis {
             override fun onResponse(call: Call, response: Response) {
 
                 val result = response.body?.string() ?: ""
-                callback(result)
 
+                val gson = Gson()
+                val analysis = gson.fromJson(result, AnalysisResponse::class.java)
+
+                callback(analysis)
             }
         })
+    }
+
+    fun messageAnalysisLv2(text: String, callback: (AnalysisResponse) -> Unit) {
+
+        val dummy = AnalysisResponse(
+            lv = 2,
+            message = text,
+            startDate = "2026-03-12",
+            startTime = "10:00",
+            endDate = "2026-03-12",
+            eventName = "ダミーイベントLv2"
+        )
+
+        callback(dummy)
+    }
+
+    fun messageAnalysisLv3(text: String, callback: (AnalysisResponse) -> Unit) {
+
+        val dummy = AnalysisResponse(
+            lv = 3,
+            message = text,
+            startDate = "2026-03-12",
+            startTime = "15:00",
+            endDate = "2026-03-12",
+            eventName = "ダミーイベントLv3"
+        )
+
+        callback(dummy)
     }
 }

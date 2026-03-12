@@ -22,6 +22,7 @@ class VoiceRecognition : AppCompatActivity() {
     private var isListening = false
     private var finalText = ""
     private val messageAnalysis = MessageAnalysis()
+    private lateinit var errorText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,7 @@ class VoiceRecognition : AppCompatActivity() {
 
         val button = findViewById<Button>(R.id.button)
         resultText = findViewById(R.id.resultText)
+        errorText = findViewById(R.id.errorText)
 
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
 
@@ -71,29 +73,35 @@ class VoiceRecognition : AppCompatActivity() {
                 }
 
                 resultText.text = finalText
+
+                if (isListening) {
+                    speechRecognizer.startListening(intent)
+                }
             }
 
             override fun onReadyForSpeech(params: Bundle?) {}
             override fun onBeginningOfSpeech() {}
             override fun onRmsChanged(rmsdB: Float) {}
             override fun onBufferReceived(buffer: ByteArray?) {}
-            override fun onEndOfSpeech() {
-                if (isListening) {
-                    speechRecognizer.startListening(intent)
-                }
-            }
+            override fun onEndOfSpeech() {}
             override fun onError(error: Int) {
+
                 if (
+                    error == SpeechRecognizer.ERROR_NO_MATCH ||
+                    error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT ||
                     error == SpeechRecognizer.ERROR_CLIENT ||
-                    error == SpeechRecognizer.ERROR_NETWORK ||
-                    error == SpeechRecognizer.ERROR_NO_MATCH
+                    error == SpeechRecognizer.ERROR_RECOGNIZER_BUSY
                 ) {
+
                     if (isListening) {
+                        speechRecognizer.cancel()
                         speechRecognizer.startListening(intent)
                     }
+
                     return
                 }
-                resultText.text = getString(R.string.error_message, error)
+
+                errorText.text = "Error: $error"
             }
             @SuppressLint("SetTextI18n")
             override fun onPartialResults(partialResults: Bundle?) {
@@ -130,8 +138,18 @@ class VoiceRecognition : AppCompatActivity() {
                     isListening = false
 
                     messageAnalysis.messageAnalysisLv1(finalText) { response ->
+
                         runOnUiThread {
-                            resultText.text = response
+
+                            val intent = Intent(this, ConfirmVoiceRecognition::class.java)
+
+                            intent.putExtra("message", response.message)
+                            intent.putExtra("event_name", response.eventName)
+                            intent.putExtra("start_date", response.startDate)
+                            intent.putExtra("start_time", response.startTime)
+                            intent.putExtra("end_date", response.endDate)
+
+                            startActivity(intent)
                         }
                     }
 
