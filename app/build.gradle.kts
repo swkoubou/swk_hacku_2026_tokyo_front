@@ -37,6 +37,24 @@ android {
 
         buildConfigField(
             "String",
+            "SERVER_URL_LV2",
+            "\"${localProperties["SERVER_URL_LV2"]}\""
+        )
+
+        buildConfigField(
+            "String",
+            "SERVER_URL_LV3",
+            "\"${localProperties["SERVER_URL_LV3"]}\""
+        )
+
+        buildConfigField(
+            "String",
+            "SERVER_URL_DEF_EVENT",
+            "\"${localProperties["SERVER_URL_DEF_EVENT"]}\""
+        )
+
+        buildConfigField(
+            "String",
             "SAMPLE_UUID",
             "\"${localProperties["SAMPLE_UUID"]}\""
         )

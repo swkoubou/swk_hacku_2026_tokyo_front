@@ -51,29 +51,71 @@ class MessageAnalysis {
 
     fun messageAnalysisLv2(text: String, callback: (AnalysisResponse) -> Unit) {
 
-        val dummy = AnalysisResponse(
-            lv = 2,
-            message = text,
-            startDate = "2026-03-12",
-            startTime = "10:00",
-            endDate = "2026-03-12",
-            eventName = "ダミーイベントLv2"
+        val json = JSONObject()
+        json.put("message", text)
+
+        val body = json.toString().toRequestBody(
+            "application/json".toMediaType()
         )
 
-        callback(dummy)
+        // SERVER_URL_LV2:これをAPI(URL)に置き換える
+        // SAMPLE_UUID:これを対応しているuuidに置き換える
+        val request = Request.Builder()
+            .url(BuildConfig.SERVER_URL_LV2)
+            .addHeader("user_uuid", BuildConfig.SAMPLE_UUID)
+            .post(body)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+
+                val result = response.body?.string() ?: ""
+
+                val gson = Gson()
+                val analysis = gson.fromJson(result, AnalysisResponse::class.java)
+
+                callback(analysis)
+            }
+        })
     }
 
     fun messageAnalysisLv3(text: String, callback: (AnalysisResponse) -> Unit) {
 
-        val dummy = AnalysisResponse(
-            lv = 3,
-            message = text,
-            startDate = "2026-03-12",
-            startTime = "15:00",
-            endDate = "2026-03-12",
-            eventName = "ダミーイベントLv3"
+        val json = JSONObject()
+        json.put("message", text)
+
+        val body = json.toString().toRequestBody(
+            "application/json".toMediaType()
         )
 
-        callback(dummy)
+        // SERVER_URL_LV3:これをAPI(URL)に置き換える
+        // SAMPLE_UUID:これを対応しているuuidに置き換える
+        val request = Request.Builder()
+            .url(BuildConfig.SERVER_URL_LV3)
+            .addHeader("user_uuid", BuildConfig.SAMPLE_UUID)
+            .post(body)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+
+                val result = response.body?.string() ?: ""
+
+                val gson = Gson()
+                val analysis = gson.fromJson(result, AnalysisResponse::class.java)
+
+                callback(analysis)
+            }
+        })
     }
 }

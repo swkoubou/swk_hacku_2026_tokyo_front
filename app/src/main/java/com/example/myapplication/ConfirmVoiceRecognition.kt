@@ -5,7 +5,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
-
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.IOException
+import org.json.JSONObject
 class ConfirmVoiceRecognition : AppCompatActivity() {
 
     private val messageAnalysis = MessageAnalysis()
@@ -13,6 +17,13 @@ class ConfirmVoiceRecognition : AppCompatActivity() {
     private var currentLv = 1
     private lateinit var message: String
     private lateinit var confirmText: TextView
+
+    private lateinit var versionCountText: TextView
+
+    private var startDateVar: String? = null
+    private var startTimeVar: String? = null
+    private var endDateVar: String? = null
+    private var eventNameVar: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +36,15 @@ class ConfirmVoiceRecognition : AppCompatActivity() {
         val startTime = intent.getStringExtra("start_time")
         val endDate = intent.getStringExtra("end_date")
 
+        eventNameVar = eventName
+        startDateVar = startDate
+        startTimeVar = startTime
+        endDateVar = endDate
+
         confirmText = findViewById(R.id.confirmText)
+        versionCountText = findViewById(R.id.versionCountText)
+
+        versionCountText.text = "あと2回バージョンアップできます"
 
         val registerButton = findViewById<Button>(R.id.registerButton)
         val cancelButton = findViewById<Button>(R.id.cancelButton)
@@ -36,12 +55,56 @@ class ConfirmVoiceRecognition : AppCompatActivity() {
         // 登録
         registerButton.setOnClickListener {
 
-            AlertDialog.Builder(this)
-                .setMessage("予定を追加しました")
-                .setPositiveButton("OK") { _, _ ->
-                    finishAffinity()
+            // JSONボディ作成
+            val json = JSONObject().apply {
+                put("start_date", startDateVar ?: "")
+                put("start_time", startTimeVar ?: "00:00:00")
+                put("end_date", endDateVar ?: "")
+                put("event_name", eventNameVar ?: "")
+            }
+
+            val body = json.toString().toRequestBody("application/json".toMediaType())
+
+            // リクエスト作成
+            val request = Request.Builder()
+                .url(BuildConfig.SERVER_URL_DEF_EVENT)
+                .addHeader("user_uuid", BuildConfig.SAMPLE_UUID)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build()
+
+            // OkHttpClientで非同期送信
+            val client = OkHttpClient()
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                    runOnUiThread {
+                        AlertDialog.Builder(this@ConfirmVoiceRecognition)
+                            .setMessage("登録に失敗しました")
+                            .setPositiveButton("OK", null)
+                            .show()
+                    }
                 }
-                .show()
+
+                override fun onResponse(call: Call, response: Response) {
+                    val resBody = response.body?.string() ?: ""
+                    val success = try {
+                        JSONObject(resBody).optBoolean("success", false)
+                    } catch (e: Exception) {
+                        false
+                    }
+
+                    runOnUiThread {
+                        val msg = if (success) "予定を追加しました" else "登録に失敗しました"
+                        AlertDialog.Builder(this@ConfirmVoiceRecognition)
+                            .setMessage(msg)
+                            .setPositiveButton("OK") { _, _ ->
+                                if (success) finishAffinity()
+                            }
+                            .show()
+                    }
+                }
+            })
         }
 
         // 再録音
@@ -66,7 +129,13 @@ class ConfirmVoiceRecognition : AppCompatActivity() {
                                 response.endDate
                             )
 
+                            eventNameVar = response.eventName
+                            startDateVar = response.startDate
+                            startTimeVar = response.startTime
+                            endDateVar = response.endDate
+
                             currentLv = 2
+                            versionCountText.text = "あと1回バージョンアップできます"
                         }
                     }
                 }
@@ -83,9 +152,15 @@ class ConfirmVoiceRecognition : AppCompatActivity() {
                                 response.endDate
                             )
 
+                            eventNameVar = response.eventName
+                            startDateVar = response.startDate
+                            startTimeVar = response.startTime
+                            endDateVar = response.endDate
+
                             currentLv = 3
 
                             versionUpButton.visibility = Button.GONE
+                            versionCountText.visibility = TextView.GONE
                         }
                     }
                 }
@@ -101,11 +176,12 @@ class ConfirmVoiceRecognition : AppCompatActivity() {
     ) {
 
         confirmText.text = """
-            イベント: $eventName
-            
-            開始: $startDate $startTime
-            
-            終了: $endDate
+        イベント: ${eventName ?: ""}
+        
+        開始: ${startDate ?: ""} ${startTime ?: "00:00:00"}
+        
+        終了: ${endDate ?: ""}
+        
         """.trimIndent()
     }
 }
