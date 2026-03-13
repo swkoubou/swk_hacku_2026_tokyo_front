@@ -10,60 +10,97 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.github.boguszpawlowski.composecalendar.StaticCalendar
 import io.github.boguszpawlowski.composecalendar.rememberCalendarState
+import retrofit2.http.Body
+import retrofit2.http.POST
+import retrofit2.http.Path
 import java.time.LocalDate
+import java.time.format.DateTimeParseException
+import retrofit2.http.Header
+
+data class EventResponse(
+    val event_name: String,
+    val start_date: String,
+    val start_time: String?,
+    val end_date: String,
+    val user_uuid: String,
+    val task_uuid: String
+)
+
+data class YearRequest(
+    val year: String
+)
+
+interface ApiService {
+    // 仕様に合わせてエンドポイントを修正し、Headerでuuidを受け取るように変更
+    @POST("get_year_events")
+    suspend fun getYearEvents(
+        @Header("user_uuid") uuid: String,
+        @Body request: YearRequest
+    ): List<EventResponse>
+}
+
+// --- 2. カレンダー画面のメイン実装 ---
 
 @Composable
-fun FullMonthCalendarScreen() {
+fun FullMonthCalendarScreen(apiService: ApiService) {
+    // 状態管理（APIから取得したイベントを日付ごとにMapで保持）
+    // 型推論を助けるために型を明示的に指定
+    var eventsMap by remember { mutableStateOf<Map<LocalDate, List<EventResponse>>>(emptyMap()) }
     val calendarState = rememberCalendarState()
 
-    // サンプルの予定データ（本来はViewModelなどで管理）
-    val scheduleMap = mapOf(
-        LocalDate.now() to listOf("会議", "飲み会"),
-        LocalDate.now().plusDays(1) to listOf("ジム"),
-        LocalDate.now().plusDays(3) to listOf("バイト", "買い物")
-    )
+    LaunchedEffect(Unit) {
+        try {
+            val response = apiService.getYearEvents(
+                "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12",
+                YearRequest("2026")
+            )
+
+            // 型安全な変換方法
+            eventsMap = response.mapNotNull { event ->
+                try {
+                    val date = LocalDate.parse(event.start_date)
+                    date to event
+                } catch (e: DateTimeParseException) {
+                    null
+                }
+            }.groupBy({ it.first }, { it.second }) // Pairの1つ目をキー、2つ目を値としてグループ化
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // 月の切り替えなどはデフォルトのヘッダーが処理してくれます
         StaticCalendar(
             calendarState = calendarState,
             modifier = Modifier.fillMaxSize(),
-            // 日付セルの見た目をフルカスタム
             dayContent = { dayState ->
                 val date = dayState.date
-                val schedules = scheduleMap[date] ?: emptyList()
-
-                // 当月以外の日付を薄くするための判定
-                // ライブラリのバージョンにより dayState.isFromCurrentMonth など名称が異なる場合があるため
-                // calendarStateから取得した表示月と比較するのが確実です
+                val dayEvents = eventsMap[date] ?: emptyList()
                 val isCurrentMonth = date.month == calendarState.monthState.currentMonth.month
 
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(130.dp) // 高さを出してGoogleカレンダー風に
+                        .heightIn(min = 100.dp)
                         .border(0.2.dp, Color.LightGray)
                         .clickable {
-                            // タップした時の処理（例：選択状態にする）
                             calendarState.selectionState.onDateSelected(date)
                         },
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // 日付の数字
                     Text(
                         text = date.dayOfMonth.toString(),
                         style = MaterialTheme.typography.labelSmall,
-                        color = if (isCurrentMonth)
-                            MaterialTheme.colorScheme.onSurface
-                        else
-                            Color.LightGray,
+                        color = if (isCurrentMonth) MaterialTheme.colorScheme.onSurface else Color.LightGray,
                         modifier = Modifier.padding(top = 2.dp)
                     )
 
-                    // 予定のラベル表示（最大3つ程度）
-                    schedules.take(5).forEach { title ->
+                    // 予定を表示
+                    dayEvents.take(5).forEach { event ->
                         Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -72,11 +109,11 @@ fun FullMonthCalendarScreen() {
                             shape = RoundedCornerShape(2.dp)
                         ) {
                             Text(
-                                text = title,
+                                text = event.event_name,
                                 style = MaterialTheme.typography.labelSmall,
                                 maxLines = 1,
-                                modifier = Modifier.padding(horizontal = 2.dp),
-                                fontSize = MaterialTheme.typography.labelSmall.fontSize * 0.8f // 少し小さく
+                                fontSize = 9.sp,
+                                modifier = Modifier.padding(horizontal = 2.dp)
                             )
                         }
                     }

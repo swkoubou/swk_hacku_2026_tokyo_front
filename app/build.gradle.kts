@@ -5,6 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.myapplication"
+    compileSdk = 34
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -13,8 +14,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.myapplication"
-        minSdk = 24
-        targetSdk = 36
+        minSdk = 26
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -66,4 +67,7 @@ dependencies {
     // KotlinのDate/Time API（java.time）を古いAndroidバージョンでも使うためのライブラリ
     // (Android 8.0未満をサポートする場合に必要)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    // Retrofit (API通信用)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }
