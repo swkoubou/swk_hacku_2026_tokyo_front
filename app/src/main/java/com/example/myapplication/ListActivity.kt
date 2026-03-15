@@ -14,7 +14,6 @@ import okhttp3.RequestBody
 import okhttp3.MediaType.Companion.toMediaType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -98,7 +97,6 @@ class ListActivity : AppCompatActivity() {
                 val response = client.newCall(request).execute()
                 val responseBody = response.body?.string()
 
-                Log.d("TaskLog", responseBody!!)
                 callback(responseBody)
 
             } catch (e: Exception) {
@@ -125,7 +123,6 @@ class ListActivity : AppCompatActivity() {
                     val response = client.newCall(request).execute()
                     val responseBody = response.body?.string()
 
-                    Log.d("TaskLog", "Rollback:" + responseBody!!)
                     callback()
 
                 } catch (e: Exception) {
@@ -145,7 +142,6 @@ class ListActivity : AppCompatActivity() {
                     val response = client.newCall(request).execute()
                     val responseBody = response.body?.string()
 
-                    Log.d("TaskLog", "Do:" + responseBody!!)
                     callback()
 
                 } catch (e: Exception) {
