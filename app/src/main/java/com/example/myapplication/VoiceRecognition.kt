@@ -69,7 +69,7 @@ class VoiceRecognition : AppCompatActivity() {
 
         val toSetting = findViewById<Button>(R.id.toSetting)
         toSetting.setOnClickListener {
-            val intent = Intent(this, UserSetting::class.java)
+            val intent = Intent(this, FeatureSettingsActivity::class.java)
             startActivity(intent)
         }
 
