@@ -1,0 +1,121 @@
+package com.example.myapplication
+
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
+import java.io.IOException
+import com.google.gson.Gson
+
+class MessageAnalysis {
+    private val client = OkHttpClient()
+
+    //----------------------------------------------------------
+    // 関数名:messageAnalysisLv1
+    // 処理:受け取ったメッセージをlv1 APIへ送信し、そのレスポンスを受け取る
+    //----------------------------------------------------------
+    fun messageAnalysisLv1(text: String, callback: (AnalysisResponse) -> Unit) {
+
+        val json = JSONObject()
+        json.put("message", text)
+
+        val body = json.toString().toRequestBody(
+            "application/json".toMediaType()
+        )
+
+        // SERVER_URL_LV1:これをAPI(URL)に置き換える
+        // SAMPLE_UUID:これを対応しているuuidに置き換える
+        val request = Request.Builder()
+            .url("https://hackutokyo2026.yoimiya.net/lv1")
+            .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
+            .post(body)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+
+                val result = response.body?.string() ?: ""
+
+                val gson = Gson()
+                val analysis = gson.fromJson(result, AnalysisResponse::class.java)
+
+                callback(analysis)
+            }
+        })
+    }
+
+    fun messageAnalysisLv2(text: String, callback: (AnalysisResponse) -> Unit) {
+
+        val json = JSONObject()
+        json.put("message", text)
+
+        val body = json.toString().toRequestBody(
+            "application/json".toMediaType()
+        )
+
+        // SERVER_URL_LV2:これをAPI(URL)に置き換える
+        // SAMPLE_UUID:これを対応しているuuidに置き換える
+        val request = Request.Builder()
+            .url("https://hackutokyo2026.yoimiya.net/lv2")
+            .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
+            .post(body)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+
+                val result = response.body?.string() ?: ""
+
+                val gson = Gson()
+                val analysis = gson.fromJson(result, AnalysisResponse::class.java)
+
+                callback(analysis)
+            }
+        })
+    }
+
+    fun messageAnalysisLv3(text: String, callback: (AnalysisResponse) -> Unit) {
+
+        val json = JSONObject()
+        json.put("message", text)
+
+        val body = json.toString().toRequestBody(
+            "application/json".toMediaType()
+        )
+
+        // SERVER_URL_LV3:これをAPI(URL)に置き換える
+        // SAMPLE_UUID:これを対応しているuuidに置き換える
+        val request = Request.Builder()
+            .url("https://hackutokyo2026.yoimiya.net/lv3")
+            .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
+            .post(body)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+
+                val result = response.body?.string() ?: ""
+
+                val gson = Gson()
+                val analysis = gson.fromJson(result, AnalysisResponse::class.java)
+
+                callback(analysis)
+            }
+        })
+    }
+}
