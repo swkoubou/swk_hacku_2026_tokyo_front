@@ -45,7 +45,6 @@ class ListActivity : AppCompatActivity() {
             runOnUiThread {
 
                 val taskList = parseJson(responseBody)
-
                 val adapter = TaskAdapter(this, taskList)
 
                 listView.adapter = adapter
