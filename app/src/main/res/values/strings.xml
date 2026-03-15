@@ -39,4 +39,7 @@
     <string name="back_button_label">← 戻る</string>
     <string name="regenerating_text">再生成しています...</string>
     <string name="edit_result_button">結果を編集する</string>
+    <string name="shortcut_todo_short_label">やることリスト</string>
+    <string name="shortcut_todo_long_label">やることリストを開く</string>
+    <string name="launcher_todo_label">やることリスト</string>
 </resources>

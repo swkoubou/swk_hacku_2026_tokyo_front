@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.LocalTime
 
-class ListActivity : AppCompatActivity() {
+open class ListActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var taskAdapter: TaskAdapter
     private var isUpdating = false

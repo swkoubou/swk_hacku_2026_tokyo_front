@@ -26,6 +26,29 @@
         <activity
             android:name=".ListActivity"
             android:exported="false" />
+        <activity
+            android:name=".TodoStandaloneActivity"
+            android:exported="false"
+            android:taskAffinity="com.example.myapplication.todo"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".TodoLauncherActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true" />
+        <activity-alias
+            android:name=".TodoLauncherAlias"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@drawable/ic_shortcut_todo"
+            android:label="@string/launcher_todo_label"
+            android:roundIcon="@drawable/ic_shortcut_todo"
+            android:targetActivity=".TodoStandaloneActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
 
         <activity
             android:name=".UserSetting"
@@ -37,11 +60,15 @@
         <!-- Launcher Activity -->
         <activity
             android:name=".VoiceRecognition"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
 
         <activity
