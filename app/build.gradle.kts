@@ -1,6 +1,12 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
 }
+
+val localProperties = Properties()
+localProperties.load(FileInputStream(rootProject.file("local.properties")))
 
 android {
     namespace = "com.example.myapplication"
@@ -10,14 +16,48 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.example.myapplication"
-        minSdk = 26
+        minSdk = 24
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "SERVER_URL_LV1",
+            "\"${localProperties["SERVER_URL_LV1"]}\""
+        )
+
+        buildConfigField(
+            "String",
+            "SERVER_URL_LV2",
+            "\"${localProperties["SERVER_URL_LV2"]}\""
+        )
+
+        buildConfigField(
+            "String",
+            "SERVER_URL_LV3",
+            "\"${localProperties["SERVER_URL_LV3"]}\""
+        )
+
+        buildConfigField(
+            "String",
+            "SERVER_URL_DEF_EVENT",
+            "\"${localProperties["SERVER_URL_DEF_EVENT"]}\""
+        )
+
+        buildConfigField(
+            "String",
+            "SAMPLE_UUID",
+            "\"${localProperties["SAMPLE_UUID"]}\""
+        )
     }
 
     buildTypes {
@@ -44,7 +84,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.google.code.gson:gson:2.10.1")
 }
