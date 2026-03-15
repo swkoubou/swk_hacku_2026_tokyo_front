@@ -36,6 +36,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".calendar.CalendarActivity"
+            android:exported="false"/>
+
         <!-- Service -->
         <service
             android:name=".FloatingService"

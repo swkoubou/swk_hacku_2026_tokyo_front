@@ -25,6 +25,8 @@ import android.app.TimePickerDialog
 import androidx.compose.ui.platform.LocalContext
 import java.util.*
 import android.util.Log
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 // --- データモデル ---
 data class EventResponse(
@@ -77,10 +79,14 @@ interface ApiService {
 }
 
 // --- メイン画面 ---
-// --- メイン画面 ---
 @Composable
-fun FullMonthCalendarScreen(apiService: ApiService) {
-    // 修正1: 型を List<CalendarEventDisplay> に変更
+fun FullMonthCalendarScreen() {
+    val retrofit = Retrofit.Builder()
+        .baseUrl("https://hackutokyo2026.yoimiya.net/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    val apiService = retrofit.create(ApiService::class.java)
+
     var eventsMap by remember { mutableStateOf<Map<LocalDate, List<CalendarEventDisplay>>>(emptyMap()) }
     val calendarState = rememberCalendarState()
     val userUuid = "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12"
@@ -170,8 +176,8 @@ fun FullMonthCalendarScreen(apiService: ApiService) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(min = 100.dp) // マスの最小高さを確保
-                            .border(0.2.dp, Color.LightGray) // 枠線を復活
-                            .clickable { detailDate = date } // クリックイベントを復活
+                            .border(0.2.dp, Color.LightGray) // 枠線
+                            .clickable { detailDate = date } // クリックイベント
                             .padding(top = 2.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {

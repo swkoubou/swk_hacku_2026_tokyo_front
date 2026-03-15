@@ -14,6 +14,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MotionEvent
 import android.annotation.SuppressLint
+import com.example.myapplication.calendar.CalendarActivity
+
 
 class VoiceRecognition : AppCompatActivity() {
 
@@ -68,6 +70,12 @@ class VoiceRecognition : AppCompatActivity() {
         val toSetting = findViewById<Button>(R.id.toSetting)
         toSetting.setOnClickListener {
             val intent = Intent(this, UserSetting::class.java)
+            startActivity(intent)
+        }
+
+        val toConfirm = findViewById<Button>(R.id.toConfirm)
+        toConfirm.setOnClickListener {
+            val intent = Intent(this, CalendarActivity::class.java)
             startActivity(intent)
         }
 
