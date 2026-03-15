@@ -1,15 +1,20 @@
 package com.example.myapplication.calendar
 
 import kotlinx.coroutines.launch
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.boguszpawlowski.composecalendar.StaticCalendar
@@ -20,12 +25,17 @@ import retrofit2.http.Header
 import java.time.LocalDate
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import androidx.compose.ui.platform.LocalContext
+import android.app.Activity
 import java.util.*
 import android.util.Log
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.example.myapplication.UuidManager
+
+private fun formatDisplayTime(time: String?): String {
+    if (time.isNullOrBlank()) return "時間未設定"
+    return if (time.length >= 5) time.substring(0, 5) else time
+}
 
 // --- データモデル ---
 data class EventResponse(
@@ -41,7 +51,7 @@ data class YearRequest(val year: String)
 data class UpdateEventRequest(
     val task_uuid: String,
     val new_start_date: String,
-    val new_start_time: String,
+    val new_start_time: String?,
     val new_end_date: String,
     val new_event_name: String
 )
@@ -104,8 +114,13 @@ fun FullMonthCalendarScreen() {
     var detailDate by remember { mutableStateOf<LocalDate?>(null) }
     var selectedEvent by remember { mutableStateOf<EventResponse?>(null) }
     var showEditDialog by remember { mutableStateOf(false) }
+    val today = LocalDate.now()
 
     val scope = rememberCoroutineScope()
+
+    BackHandler(enabled = detailDate != null) {
+        detailDate = null
+    }
 
     fun refreshEvents() {
         scope.launch {
@@ -173,19 +188,36 @@ fun FullMonthCalendarScreen() {
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (detailDate == null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextButton(onClick = { (context as? Activity)?.finish() }) {
+                    Text("← 戻る")
+                }
+            }
             StaticCalendar(
                 calendarState = calendarState,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 44.dp),
                 dayContent = { dayState ->
                     val date = dayState.date
                     val dayEvents = eventsMap[date] ?: emptyList()
+                    val isToday = date == today
                     // 今月以外の日付を薄くするための判定
                     val isCurrentMonth = date.month == calendarState.monthState.currentMonth.month
 
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(min = 100.dp) // マスの最小高さを確保
+                            .heightIn(min = 124.dp) // 表示件数を増やすため少し広げる
+                            .background(
+                                color = if (isToday) Color(0xFFFFF7D6) else Color.Transparent,
+                                shape = RoundedCornerShape(4.dp)
+                            )
                             .border(0.2.dp, Color.LightGray) // 枠線
                             .clickable { detailDate = date } // クリックイベント
                             .padding(top = 2.dp),
@@ -201,8 +233,8 @@ fun FullMonthCalendarScreen() {
 
                         // --- 2. イベントバー表示部分 ---
                         Column(modifier = Modifier.fillMaxWidth()) {
-                            // 最大3行分（または4行分）の枠を用意
-                            (0..2).forEach { rowIndex ->
+                            // 最大5行分を表示
+                            (0..4).forEach { rowIndex ->
                                 val display = dayEvents.find { it.rowIndex == rowIndex }
 
                                 if (display != null) {
@@ -224,10 +256,10 @@ fun FullMonthCalendarScreen() {
                                     Surface(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .height(18.dp)
+                                            .height(16.dp)
                                             .padding(vertical = 1.dp)
                                             .padding(horizontalPadding),
-                                        color = if (display.event.event_name.contains("旅行")) Color(0xFF81C784) else MaterialTheme.colorScheme.primaryContainer,
+                                        color = MaterialTheme.colorScheme.primaryContainer,
                                         shape = shape
                                     ) {
                                         // 開始日または単発の時だけ文字を出す
@@ -242,14 +274,14 @@ fun FullMonthCalendarScreen() {
                                     }
                                 } else {
                                     // 予定がない行も Spacer で埋めて高さを一定にする
-                                    Spacer(modifier = Modifier.height(18.dp).padding(vertical = 1.dp))
+                                    Spacer(modifier = Modifier.height(16.dp).padding(vertical = 1.dp))
                                 }
                             }
 
-                            // 4件以上の表示
-                            if (dayEvents.size > 3) {
+                            // 6件以上の表示
+                            if (dayEvents.size > 5) {
                                 Text(
-                                    text = "+他${dayEvents.size - 3}件",
+                                    text = "+他${dayEvents.size - 5}件",
                                     fontSize = 8.sp,
                                     color = MaterialTheme.colorScheme.secondary,
                                     modifier = Modifier.padding(start = 4.dp)
@@ -263,42 +295,86 @@ fun FullMonthCalendarScreen() {
             val targetDate = detailDate!!
             val dayEvents = eventsMap[targetDate] ?: emptyList()
 
-            Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+            Column(modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     TextButton(onClick = { detailDate = null }) { Text("← カレンダーに戻る") }
                 }
-                Text(
-                    text = "${targetDate.year}年${targetDate.monthValue}月${targetDate.dayOfMonth}日",
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-
-                if (dayEvents.isEmpty()) {
-                    Text("予定はありません", modifier = Modifier.padding(top = 16.dp))
-                } else {
-                    dayEvents.forEach { display ->
-                        // 修正3: display.event を使用
-                        val event = display.event
-                        Card(
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentPadding = PaddingValues(bottom = 12.dp)
+                ) {
+                    item {
+                        ElevatedCard(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 4.dp)
-                                .clickable {
-                                    selectedEvent = event
-                                    showEditDialog = true
-                                }
+                                .padding(vertical = 8.dp)
                         ) {
-                            ListItem(
-                                headlineContent = { Text(event.event_name) },
-                                supportingContent = {
-                                    val timeLabel = if (display.position == EventPosition.SINGLE || display.position == EventPosition.START) {
-                                        event.start_time ?: "時間未設定"
-                                    } else {
-                                        "（連日予定）"
-                                    }
-                                    Text(timeLabel)
-                                }
+                            Column(modifier = Modifier.padding(14.dp)) {
+                                Text(
+                                    text = "${targetDate.year}年${targetDate.monthValue}月${targetDate.dayOfMonth}日",
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                                Text(
+                                    text = "この日の予定 ${dayEvents.size}件",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.padding(top = 4.dp)
+                                )
+                            }
+                        }
+                    }
+
+                    if (dayEvents.isEmpty()) {
+                        item {
+                            Text(
+                                "予定はありません",
+                                modifier = Modifier.padding(top = 16.dp),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
+                        }
+                    } else {
+                        items(dayEvents) { display ->
+                            val event = display.event
+                            val timeLabel = formatDisplayTime(event.start_time)
+                            ElevatedCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 6.dp)
+                                    .clickable {
+                                        selectedEvent = event
+                                        showEditDialog = true
+                                    }
+                            ) {
+                                Column(modifier = Modifier.padding(14.dp)) {
+                                    Text(
+                                        text = event.event_name,
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                    Text(
+                                        text = "開始: ${event.start_date}",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        modifier = Modifier.padding(top = 6.dp)
+                                    )
+                                    Text(
+                                        text = "時間: $timeLabel",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        modifier = Modifier.padding(top = 2.dp)
+                                    )
+                                    Text(
+                                        text = "終了: ${event.end_date}",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        modifier = Modifier.padding(top = 2.dp)
+                                    )
+                                    Text(
+                                        text = "タップで編集",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.padding(top = 8.dp)
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -350,16 +426,15 @@ fun EditEventDialog(
     var name by remember { mutableStateOf(event.event_name) }
     var startDate by remember { mutableStateOf(event.start_date) }
     var endDate by remember { mutableStateOf(event.end_date) } // 終了日の状態を追加
-    var startTime by remember { mutableStateOf(event.start_time ?: "09:00:00") }
+    var startTime by remember { mutableStateOf(event.start_time) }
+    var showDeleteConfirm by remember { mutableStateOf(false) }
 
-    // 開始日選択：選んだら終了日を自動で +1日 する
+    // 開始日選択：終了日は自動変更しない
     fun showStartDatePicker() {
         val dateParts = startDate.split("-").map { it.toInt() }
         DatePickerDialog(context, { _, year, month, dayOfMonth ->
             val selected = LocalDate.of(year, month + 1, dayOfMonth)
             startDate = selected.toString()
-            // 開始日を変えたら、終了日は自動的にその翌日に設定する
-            endDate = selected.plusDays(0).toString()
         }, dateParts[0], dateParts[1] - 1, dateParts[2]).show()
     }
 
@@ -372,7 +447,9 @@ fun EditEventDialog(
     }
 
     fun showTimePicker() {
-        val timeParts = startTime.split(":").map { it.toInt() }
+        val fallbackTime = java.time.LocalTime.now()
+        val timeSource = startTime ?: String.format("%02d:%02d:00", fallbackTime.hour, fallbackTime.minute)
+        val timeParts = timeSource.split(":").map { it.toInt() }
         TimePickerDialog(context, { _, hourOfDay, minute ->
             startTime = "%02d:%02d:00".format(hourOfDay, minute)
         }, timeParts[0], timeParts[1], true).show()
@@ -409,9 +486,16 @@ fun EditEventDialog(
                 OutlinedCard(onClick = { showTimePicker() }, modifier = Modifier.fillMaxWidth()) {
                     ListItem(
                         headlineContent = { Text("時刻") },
-                        supportingContent = { Text(startTime) },
+                        supportingContent = { Text(formatDisplayTime(startTime)) },
                         trailingContent = { Text("変更", color = MaterialTheme.colorScheme.primary) }
                     )
+                }
+
+                TextButton(
+                    onClick = { startTime = null },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("時間未設定にする")
                 }
             }
         },
@@ -427,10 +511,31 @@ fun EditEventDialog(
             }) { Text("保存") }
         },
         dismissButton = {
-            TextButton(onClick = { onDelete(event.task_uuid) }) {
+            TextButton(onClick = { showDeleteConfirm = true }) {
                 Text("削除", color = Color.Red)
             }
         }
     )
+
+    if (showDeleteConfirm) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirm = false },
+            title = { Text("予定を削除しますか？") },
+            text = { Text("この操作は元に戻せません。") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDeleteConfirm = false
+                    onDelete(event.task_uuid)
+                }) {
+                    Text("削除", color = Color.Red)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirm = false }) {
+                    Text("キャンセル")
+                }
+            }
+        )
+    }
 }
 

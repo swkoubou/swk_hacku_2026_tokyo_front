@@ -2,8 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/ui_space_s"
+    android:layout_marginVertical="@dimen/ui_space_xs"
+    android:background="@drawable/bg_card_item"
     android:orientation="horizontal"
-    android:paddingStart="24dp">
+    android:paddingHorizontal="@dimen/ui_space_m"
+    android:paddingVertical="@dimen/ui_space_s">
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -11,7 +15,8 @@
         android:layout_height="wrap_content"
         android:clickable="false"
         android:focusable="false"
-        android:padding="12dp"
-        android:textSize="24sp" />
+        android:padding="@dimen/ui_space_m"
+        android:textColor="@color/ui_text_primary"
+        android:textSize="@dimen/ui_text_l" />
 
 </LinearLayout>

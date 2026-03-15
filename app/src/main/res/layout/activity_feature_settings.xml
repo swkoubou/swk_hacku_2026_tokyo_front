@@ -1,122 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/ui_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
-
-        <TextView
-            android:id="@+id/tv_app_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/app_screen_title"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/app_description"
-            android:textColor="#666666"
-            android:textSize="16sp" />
+        android:padding="@dimen/ui_space_xl">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="#F3F4F6"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/back_button_label" />
+
+            <TextView
+                android:id="@+id/tv_app_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ui_space_m"
+                android:layout_weight="1"
+                android:text="@string/app_screen_title"
+                android:textColor="@color/ui_text_primary"
+                android:textSize="@dimen/ui_text_xxl"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_space_s"
+            android:text="@string/app_description"
+            android:textColor="@color/ui_text_secondary"
+            android:textSize="@dimen/ui_text_m" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_space_xl"
+            android:background="@drawable/bg_surface_panel"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/ui_space_l">
 
             <TextView
                 android:id="@+id/tv_top_spacer_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/top_spacer_title"
-                android:textSize="20sp"
+                android:textColor="@color/ui_text_primary"
+                android:textSize="@dimen/ui_text_l"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/ui_space_xs"
                 android:text="@string/top_spacer_description"
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:textColor="@color/ui_text_secondary"
+                android:textSize="@dimen/ui_text_s" />
 
             <TextView
                 android:id="@+id/tv_top_spacer_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textSize="16sp"
+                android:layout_marginTop="@dimen/ui_space_m"
+                android:textColor="@color/ui_text_primary"
+                android:textSize="@dimen/ui_text_m"
                 android:textStyle="bold" />
 
             <SeekBar
                 android:id="@+id/seek_top_spacer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp" />
+                android:layout_marginTop="@dimen/ui_space_s" />
 
             <TextView
                 android:id="@+id/tv_max_visible_events_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="@dimen/ui_space_m"
                 android:text="@string/max_visible_events_title"
-                android:textSize="20sp"
+                android:textColor="@color/ui_text_primary"
+                android:textSize="@dimen/ui_text_l"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/ui_space_xs"
                 android:text="@string/max_visible_events_description"
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:textColor="@color/ui_text_secondary"
+                android:textSize="@dimen/ui_text_s" />
 
             <TextView
                 android:id="@+id/tv_max_visible_events_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textSize="16sp"
+                android:layout_marginTop="@dimen/ui_space_m"
+                android:textColor="@color/ui_text_primary"
+                android:textSize="@dimen/ui_text_m"
                 android:textStyle="bold" />
 
             <SeekBar
                 android:id="@+id/seek_max_visible_events"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp" />
+                android:layout_marginTop="@dimen/ui_space_s" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="#F3F4F6"
+            android:layout_marginTop="@dimen/ui_space_l"
+            android:background="@drawable/bg_surface_panel"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/ui_space_l">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/color_settings_title"
-                android:textSize="20sp"
+                android:textColor="@color/ui_text_primary"
+                android:textSize="@dimen/ui_text_l"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/ui_space_xs"
                 android:text="@string/color_settings_description"
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:textColor="@color/ui_text_secondary"
+                android:textSize="@dimen/ui_text_s" />
 
             <LinearLayout
                 android:id="@+id/row_color_background"
@@ -312,55 +334,56 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="#F3F4F6"
+            android:layout_marginTop="@dimen/ui_space_l"
+            android:background="@drawable/bg_surface_panel"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/ui_space_l">
 
             <TextView
                 android:id="@+id/tv_user_uuid_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/user_uuid_title"
-                android:textSize="20sp"
+                android:textColor="@color/ui_text_primary"
+                android:textSize="@dimen/ui_text_l"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/ui_space_xs"
                 android:text="@string/user_uuid_description"
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:textColor="@color/ui_text_secondary"
+                android:textSize="@dimen/ui_text_s" />
 
             <EditText
                 android:id="@+id/et_user_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="#FFFFFF"
+                android:layout_marginTop="@dimen/ui_space_m"
+                android:background="@drawable/bg_card_item"
                 android:hint="@string/user_uuid_hint"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:padding="12dp"
-                android:textSize="16sp" />
+                android:padding="@dimen/ui_space_m"
+                android:textSize="@dimen/ui_text_m" />
 
             <Button
                 android:id="@+id/btn_save_user_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="@dimen/ui_space_m"
                 android:text="@string/save_user_uuid_button"
-                android:textSize="16sp" />
+                android:textSize="@dimen/ui_text_m" />
         </LinearLayout>
 
         <Button
             android:id="@+id/btn_apply_wallpaper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:layout_marginBottom="14dp"
+            android:layout_marginTop="@dimen/ui_space_xl"
+            android:layout_marginBottom="@dimen/ui_space_m"
             android:text="@string/apply_wallpaper_button"
-            android:textSize="18sp" />
+            android:textSize="@dimen/ui_text_l" />
     </LinearLayout>
 </ScrollView>

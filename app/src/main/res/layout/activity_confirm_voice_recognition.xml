@@ -5,46 +5,103 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/ui_bg"
     tools:context=".ConfirmVoiceRecognition">
 
-    <!-- スクロールエリア -->
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_space_l"
+        android:layout_marginTop="@dimen/ui_space_l"
+        android:text="@string/back_button_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 下固定エリア -->
-
-    <ScrollView
-        android:id="@+id/scrollArea"
+    <LinearLayout
+        android:id="@+id/resultCard"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_space_xxl"
+        android:layout_marginEnd="@dimen/ui_space_xxl"
+        android:background="@drawable/bg_surface_panel"
+        android:orientation="vertical"
+        android:padding="@dimen/ui_space_l"
         app:layout_constraintBottom_toTopOf="@id/bottomArea"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintVertical_bias="0.5">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:text="認識結果"
+            android:textColor="@color/ui_text_primary"
+            android:textSize="@dimen/ui_text_l"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/confirmText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp" />
+        <TextView
+            android:id="@+id/tvInputMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_space_s"
+            android:textColor="@color/ui_text_secondary"
+            android:textSize="@dimen/ui_text_s" />
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tvEventValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_space_m"
+            android:textColor="@color/ui_text_primary"
+            android:textSize="@dimen/ui_text_m" />
 
-    </ScrollView>
+        <TextView
+            android:id="@+id/tvStartDateValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_space_s"
+            android:textColor="@color/ui_text_primary"
+            android:textSize="@dimen/ui_text_m" />
+
+        <TextView
+            android:id="@+id/tvStartTimeValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_space_s"
+            android:textColor="@color/ui_text_primary"
+            android:textSize="@dimen/ui_text_m" />
+
+        <TextView
+            android:id="@+id/tvEndDateValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_space_s"
+            android:textColor="@color/ui_text_primary"
+            android:textSize="@dimen/ui_text_m" />
+
+        <TextView
+            android:id="@+id/tvMetaInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_space_m"
+            android:textColor="@color/ui_text_secondary"
+            android:textSize="@dimen/ui_text_s" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/bottomArea"
-        android:layout_width="406dp"
-        android:layout_height="239dp"
-        android:orientation="vertical"
-        android:padding="16dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_surface_panel"
         android:gravity="bottom"
+        android:orientation="vertical"
+        android:padding="@dimen/ui_space_l"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -54,13 +111,13 @@
             android:id="@+id/registerButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="登録" />
+            android:text="✅ 登録" />
 
         <Button
             android:id="@+id/cancelButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="再録音" />
+            android:text="🎤 再録音" />
 
         <TextView
             android:id="@+id/versionCountText"
@@ -68,13 +125,47 @@
             android:layout_height="wrap_content"
             android:text="あと2回やり直せます"
             android:layout_marginVertical="8dp"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textColor="@color/ui_text_secondary"/>
 
         <Button
             android:id="@+id/versionUpButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="違うからやり直せ！" />
+            android:text="処理レベルを上げて再生成する" />
+
+        <Button
+            android:id="@+id/editResultButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_space_s"
+            android:text="@string/edit_result_button"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/loadingContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_space_s"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/loadingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ui_space_s"
+                android:text="@string/regenerating_text"
+                android:textColor="@color/ui_text_secondary"
+                android:textSize="@dimen/ui_text_s" />
+        </LinearLayout>
 
     </LinearLayout>
 

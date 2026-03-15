@@ -28,6 +28,7 @@ class UserSetting : AppCompatActivity() {
         }
 
         val button = findViewById<Button>(R.id.toHome)
+        findViewById<Button>(R.id.btnBack).setOnClickListener { finish() }
 
         button.setOnClickListener {
             getUuid()

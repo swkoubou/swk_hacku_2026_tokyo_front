@@ -72,6 +72,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
         setupMaxVisibleEventsControls()
         setupUserUuidControls()
         setupColorControls()
+        findViewById<Button>(R.id.btn_back).setOnClickListener { finish() }
 
         findViewById<Button>(R.id.btn_apply_wallpaper).setOnClickListener {
             if (saveUserUuidFromInput()) {

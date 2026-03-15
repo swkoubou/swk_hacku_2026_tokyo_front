@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">ずぼらカレンダー</string>
     <string name="error_message">Error: %1$d</string>
     <string name="app_screen_title">今日の予定 壁紙</string>
     <string name="wallpaper_name">今日の予定 壁紙</string>
@@ -36,4 +36,7 @@
     <string name="user_uuid_required">user_uuid を入力してください</string>
     <string name="settings_saved">設定を保存しました</string>
     <string name="save_and_back_button">保存して戻る</string>
+    <string name="back_button_label">← 戻る</string>
+    <string name="regenerating_text">再生成しています...</string>
+    <string name="edit_result_button">結果を編集する</string>
 </resources>
