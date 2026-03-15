@@ -25,7 +25,7 @@ import java.util.*
 import android.util.Log
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import com.example.myapplication.UserConfig
+import com.example.myapplication.UuidManager
 
 // --- データモデル ---
 data class EventResponse(
@@ -88,7 +88,18 @@ fun FullMonthCalendarScreen() {
 
     var eventsMap by remember { mutableStateOf<Map<LocalDate, List<CalendarEventDisplay>>>(emptyMap()) }
     val calendarState = rememberCalendarState()
-    val userUuid = UserConfig.USER_UUID
+    // Contextを取得
+    val context = LocalContext.current
+
+    // UUIDを取得（String? 型）
+    val savedUuid = UuidManager.getUuid(context)
+
+    // UUIDがnullだった場合のデフォルト値を設定、または空文字にする
+    val userUuid = savedUuid ?: ""
+
+    if (userUuid.isEmpty()) {
+        Log.e("CalendarDebug", "UUIDが見つかりません。設定画面で登録してください。")
+    }
 
     var detailDate by remember { mutableStateOf<LocalDate?>(null) }
     var selectedEvent by remember { mutableStateOf<EventResponse?>(null) }
