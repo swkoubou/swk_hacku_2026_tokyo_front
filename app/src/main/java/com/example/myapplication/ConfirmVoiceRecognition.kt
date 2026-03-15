@@ -12,7 +12,7 @@ import java.io.IOException
 import org.json.JSONObject
 class ConfirmVoiceRecognition : AppCompatActivity() {
 
-    private val messageAnalysis = MessageAnalysis()
+    private val messageAnalysis by lazy { MessageAnalysis(this) }
 
     private var currentLv = 1
     private lateinit var message: String
@@ -68,7 +68,7 @@ class ConfirmVoiceRecognition : AppCompatActivity() {
             // リクエスト作成
             val request = Request.Builder()
                 .url("https://hackutokyo2026.yoimiya.net/def_event")
-                .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
+                .addHeader("user_uuid", UuidManager.getUuid(this) ?: "")
                 .addHeader("Content-Type", "application/json")
                 .post(body)
                 .build()

@@ -6,9 +6,12 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.IOException
 import com.google.gson.Gson
+import android.content.Context
 
-class MessageAnalysis {
+class MessageAnalysis(private val context: Context) {
     private val client = OkHttpClient()
+
+    val uuid = UuidManager.getUuid(context) ?: ""
 
     //----------------------------------------------------------
     // 関数名:messageAnalysisLv1
@@ -27,7 +30,7 @@ class MessageAnalysis {
         // SAMPLE_UUID:これを対応しているuuidに置き換える
         val request = Request.Builder()
             .url("https://hackutokyo2026.yoimiya.net/lv1")
-            .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
+            .addHeader("user_uuid", uuid)
             .post(body)
             .build()
 
@@ -62,7 +65,7 @@ class MessageAnalysis {
         // SAMPLE_UUID:これを対応しているuuidに置き換える
         val request = Request.Builder()
             .url("https://hackutokyo2026.yoimiya.net/lv2")
-            .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
+            .addHeader("user_uuid", uuid)
             .post(body)
             .build()
 
@@ -97,7 +100,7 @@ class MessageAnalysis {
         // SAMPLE_UUID:これを対応しているuuidに置き換える
         val request = Request.Builder()
             .url("https://hackutokyo2026.yoimiya.net/lv3")
-            .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
+            .addHeader("user_uuid", uuid)
             .post(body)
             .build()
 

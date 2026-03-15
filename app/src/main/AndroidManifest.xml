@@ -26,6 +26,10 @@
             android:name=".ListActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".UserSetting"
+            android:exported="false" />
+
         <!-- Launcher Activity -->
         <activity
             android:name=".VoiceRecognition"

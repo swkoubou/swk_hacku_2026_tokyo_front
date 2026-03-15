@@ -23,7 +23,7 @@ class VoiceRecognition : AppCompatActivity() {
     private lateinit var resultText: TextView
     private var isListening = false
     private var finalText = ""
-    private val messageAnalysis = MessageAnalysis()
+    private val messageAnalysis by lazy { MessageAnalysis(this) }
     private lateinit var errorText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
