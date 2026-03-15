@@ -57,18 +57,18 @@ class ConfirmVoiceRecognition : AppCompatActivity() {
 
             // JSONボディ作成
             val json = JSONObject().apply {
-                put("start_date", startDateVar ?: "")
-                put("start_time", startTimeVar ?: "00:00:00")
-                put("end_date", endDateVar ?: "")
-                put("event_name", eventNameVar ?: "")
+                put("start_date", startDateVar)
+                put("start_time", startTimeVar)
+                put("end_date", endDateVar)
+                put("event_name", eventNameVar)
             }
 
             val body = json.toString().toRequestBody("application/json".toMediaType())
 
             // リクエスト作成
             val request = Request.Builder()
-                .url(BuildConfig.SERVER_URL_DEF_EVENT)
-                .addHeader("user_uuid", BuildConfig.SAMPLE_UUID)
+                .url("https://hackutokyo2026.yoimiya.net/def_event")
+                .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
                 .addHeader("Content-Type", "application/json")
                 .post(body)
                 .build()

@@ -59,6 +59,18 @@ class VoiceRecognition : AppCompatActivity() {
             true
         )
 
+        val toList = findViewById<Button>(R.id.toList)
+        toList.setOnClickListener {
+            val intent = Intent(this, ListActivity::class.java)
+            startActivity(intent)
+        }
+
+        val toSetting = findViewById<Button>(R.id.toSetting)
+        toSetting.setOnClickListener {
+            val intent = Intent(this, UserSetting::class.java)
+            startActivity(intent)
+        }
+
         speechRecognizer.setRecognitionListener(object : RecognitionListener {
 
             override fun onResults(results: Bundle) {

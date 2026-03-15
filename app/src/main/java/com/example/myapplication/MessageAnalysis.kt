@@ -26,8 +26,8 @@ class MessageAnalysis {
         // SERVER_URL_LV1:これをAPI(URL)に置き換える
         // SAMPLE_UUID:これを対応しているuuidに置き換える
         val request = Request.Builder()
-            .url(BuildConfig.SERVER_URL_LV1)
-            .addHeader("user_uuid", BuildConfig.SAMPLE_UUID)
+            .url("https://hackutokyo2026.yoimiya.net/lv1")
+            .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
             .post(body)
             .build()
 
@@ -61,8 +61,8 @@ class MessageAnalysis {
         // SERVER_URL_LV2:これをAPI(URL)に置き換える
         // SAMPLE_UUID:これを対応しているuuidに置き換える
         val request = Request.Builder()
-            .url(BuildConfig.SERVER_URL_LV2)
-            .addHeader("user_uuid", BuildConfig.SAMPLE_UUID)
+            .url("https://hackutokyo2026.yoimiya.net/lv2")
+            .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
             .post(body)
             .build()
 
@@ -96,8 +96,8 @@ class MessageAnalysis {
         // SERVER_URL_LV3:これをAPI(URL)に置き換える
         // SAMPLE_UUID:これを対応しているuuidに置き換える
         val request = Request.Builder()
-            .url(BuildConfig.SERVER_URL_LV3)
-            .addHeader("user_uuid", BuildConfig.SAMPLE_UUID)
+            .url("https://hackutokyo2026.yoimiya.net/lv3")
+            .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
             .post(body)
             .build()
 

@@ -10,7 +10,6 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.MediaType.Companion.toMediaType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -87,7 +86,7 @@ class ListActivity : AppCompatActivity() {
 
         val request = Request.Builder()
             .url("https://hackutokyo2026.yoimiya.net/get_today_events")
-            .post(RequestBody.create(null, ByteArray(0))) // POST
+            .post(ByteArray(0).toRequestBody(null))
             .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
             .build()
 
