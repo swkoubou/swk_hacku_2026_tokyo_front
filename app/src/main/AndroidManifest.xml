@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,15 +16,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+
+        <!-- Activities -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ConfirmVoiceRecognition"
+            android:exported="false" />
+
+        <activity
+            android:name=".ListActivity"
+            android:exported="false" />
+
+        <!-- Launcher Activity -->
+        <activity
+            android:name=".VoiceRecognition"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".calendar.CalendarActivity"
+            android:exported="false"/>
+
+        <!-- Service -->
+        <service
+            android:name=".FloatingService"
+            android:exported="false" />
+
     </application>
 
 </manifest>
