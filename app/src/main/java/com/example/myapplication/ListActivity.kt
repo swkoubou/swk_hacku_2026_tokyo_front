@@ -56,14 +56,14 @@ class ListActivity : AppCompatActivity() {
 
                 listView.setOnItemClickListener { _, _, position, _ ->
 
-                    // 処理中なら何もしない
                     if (isUpdating) return@setOnItemClickListener
+
+                    val userUuid = UuidManager.getUuid(this) ?: return@setOnItemClickListener
 
                     isUpdating = true
 
                     val task = taskList[position]
 
-                    val userUuid = task.user_uuid
                     val taskUuid = task.task_uuid
                     val done = task.done
 
@@ -82,12 +82,15 @@ class ListActivity : AppCompatActivity() {
     }
 
     fun callApi(callback: (String?) -> Unit) {
+
+        val uuid = UuidManager.getUuid(this) ?: return
+
         val client = OkHttpClient()
 
         val request = Request.Builder()
             .url("https://hackutokyo2026.yoimiya.net/get_today_events")
             .post(ByteArray(0).toRequestBody(null))
-            .addHeader("user_uuid", "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12")
+            .addHeader("user_uuid", uuid)
             .build()
 
         Thread{
