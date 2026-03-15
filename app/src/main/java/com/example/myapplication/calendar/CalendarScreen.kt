@@ -1,11 +1,9 @@
 package com.example.myapplication.calendar
 
 import kotlinx.coroutines.launch
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,6 +25,7 @@ import java.util.*
 import android.util.Log
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.example.myapplication.UserConfig
 
 // --- データモデル ---
 data class EventResponse(
@@ -89,7 +88,7 @@ fun FullMonthCalendarScreen() {
 
     var eventsMap by remember { mutableStateOf<Map<LocalDate, List<CalendarEventDisplay>>>(emptyMap()) }
     val calendarState = rememberCalendarState()
-    val userUuid = "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12"
+    val userUuid = UserConfig.USER_UUID
 
     var detailDate by remember { mutableStateOf<LocalDate?>(null) }
     var selectedEvent by remember { mutableStateOf<EventResponse?>(null) }

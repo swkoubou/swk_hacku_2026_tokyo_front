@@ -14,6 +14,10 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import com.google.gson.Gson
 
+object UserConfig {
+    const val USER_UUID = "3c7a9a24-9e34-4f65-bc1e-9a6e6c7d7f12"
+}
+
 class UserSetting : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
