@@ -310,7 +310,10 @@ fun FullMonthCalendarScreen() {
             val dayEvents = eventsMap[targetDate] ?: emptyList()
 
             Column(modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(top = 14.dp, bottom = 8.dp)
+                ) {
                     Button(onClick = { detailDate = null }) { Text("← カレンダーに戻る") }
                 }
                 LazyColumn(

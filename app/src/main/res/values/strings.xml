@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ずぼらカレンダー</string>
     <string name="error_message">Error: %1$d</string>
-    <string name="app_screen_title">今日の予定 壁紙</string>
+    <string name="app_screen_title">設定</string>
     <string name="wallpaper_name">今日の予定 壁紙</string>
     <string name="wallpaper_description">Fetches and displays today events when visible.</string>
     <string name="app_description">設定は自動保存されます。変更後に「ライブ壁紙を適用する」を押してください。</string>
