@@ -200,15 +200,22 @@ fun FullMonthCalendarScreen() {
 
     LaunchedEffect(Unit) { refreshEvents() }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
         if (detailDate == null) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 12.dp, end = 12.dp, top = 14.dp, bottom = 8.dp),
+                    .padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Button(onClick = { (context as? Activity)?.finish() }) {
+                Button(
+                    onClick = { (context as? Activity)?.finish() },
+                    modifier = Modifier.height(48.dp)
+                ) {
                     Text("← 戻る")
                 }
             }
@@ -312,9 +319,12 @@ fun FullMonthCalendarScreen() {
             Column(modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(top = 14.dp, bottom = 8.dp)
+                    modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
                 ) {
-                    Button(onClick = { detailDate = null }) { Text("← カレンダーに戻る") }
+                    Button(
+                        onClick = { detailDate = null },
+                        modifier = Modifier.height(48.dp)
+                    ) { Text("← カレンダーに戻る") }
                 }
                 LazyColumn(
                     modifier = Modifier
@@ -465,6 +475,7 @@ fun FullMonthCalendarScreen() {
             onClick = { showAddDialog = true },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
+                .navigationBarsPadding()
                 .padding(16.dp)
         ) {
             Text("+")

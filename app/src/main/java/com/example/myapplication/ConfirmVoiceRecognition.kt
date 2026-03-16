@@ -5,6 +5,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
 import okhttp3.*
@@ -39,7 +40,9 @@ class ConfirmVoiceRecognition : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_confirm_voice_recognition)
+        WindowInsetsHelper.applySystemBarInsets(findViewById(R.id.main))
 
         message = intent.getStringExtra("message") ?: ""
 

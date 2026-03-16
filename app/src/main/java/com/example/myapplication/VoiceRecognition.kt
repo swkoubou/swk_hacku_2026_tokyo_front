@@ -20,6 +20,7 @@ import android.view.MotionEvent
 import android.annotation.SuppressLint
 import android.graphics.Color
 import com.example.myapplication.calendar.CalendarActivity
+import androidx.activity.enableEdgeToEdge
 
 
 class VoiceRecognition : AppCompatActivity() {
@@ -36,7 +37,9 @@ class VoiceRecognition : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_voice_recognition)
+        WindowInsetsHelper.applySystemBarInsets(findViewById(R.id.main))
 
         //マイクの許可（権限）処理
         if (ContextCompat.checkSelfPermission(
@@ -287,4 +290,5 @@ class VoiceRecognition : AppCompatActivity() {
         }
         recordButton.backgroundTintList = ColorStateList.valueOf(color)
     }
+
 }
