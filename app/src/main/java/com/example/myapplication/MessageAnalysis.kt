@@ -7,17 +7,37 @@ import org.json.JSONObject
 import java.io.IOException
 import com.google.gson.Gson
 import android.content.Context
+import android.os.SystemClock
 
 class MessageAnalysis(private val context: Context) {
     private val client = OkHttpClient()
+    
+    private fun getCurrentUuid(): String {
+        val appUuid = UuidManager.getUuid(context)?.trim().orEmpty()
+        if (appUuid.isNotEmpty()) return appUuid
 
-    val uuid = UuidManager.getUuid(context) ?: ""
+        val wallpaperUuid = context.getSharedPreferences(
+            WallpaperSettings.PREFS_NAME,
+            Context.MODE_PRIVATE
+        ).getString(WallpaperSettings.KEY_USER_UUID, "")?.trim().orEmpty()
+
+        return wallpaperUuid
+    }
 
     //----------------------------------------------------------
     // 関数名:messageAnalysisLv1
     // 処理:受け取ったメッセージをlv1 APIへ送信し、そのレスポンスを受け取る
     //----------------------------------------------------------
-    fun messageAnalysisLv1(text: String, callback: (AnalysisResponse) -> Unit) {
+    fun messageAnalysisLv1(
+        text: String,
+        callback: (AnalysisResponse, Long) -> Unit,
+        onError: (String) -> Unit = {}
+    ) {
+        val uuid = getCurrentUuid()
+        if (uuid.isEmpty()) {
+            onError("UUIDが未設定です。設定画面で user_uuid を保存してください。")
+            return
+        }
 
         val json = JSONObject()
         json.put("message", text)
@@ -34,10 +54,12 @@ class MessageAnalysis(private val context: Context) {
             .post(body)
             .build()
 
+        val requestStart = SystemClock.elapsedRealtime()
         client.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
+                onError(e.message ?: "通信エラー")
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -47,12 +69,22 @@ class MessageAnalysis(private val context: Context) {
                 val gson = Gson()
                 val analysis = gson.fromJson(result, AnalysisResponse::class.java)
 
-                callback(analysis)
+                val elapsedMs = SystemClock.elapsedRealtime() - requestStart
+                callback(analysis, elapsedMs)
             }
         })
     }
 
-    fun messageAnalysisLv2(text: String, callback: (AnalysisResponse) -> Unit) {
+    fun messageAnalysisLv2(
+        text: String,
+        callback: (AnalysisResponse, Long) -> Unit,
+        onError: (String) -> Unit = {}
+    ) {
+        val uuid = getCurrentUuid()
+        if (uuid.isEmpty()) {
+            onError("UUIDが未設定です。設定画面で user_uuid を保存してください。")
+            return
+        }
 
         val json = JSONObject()
         json.put("message", text)
@@ -69,10 +101,12 @@ class MessageAnalysis(private val context: Context) {
             .post(body)
             .build()
 
+        val requestStart = SystemClock.elapsedRealtime()
         client.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
+                onError(e.message ?: "通信エラー")
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -82,12 +116,22 @@ class MessageAnalysis(private val context: Context) {
                 val gson = Gson()
                 val analysis = gson.fromJson(result, AnalysisResponse::class.java)
 
-                callback(analysis)
+                val elapsedMs = SystemClock.elapsedRealtime() - requestStart
+                callback(analysis, elapsedMs)
             }
         })
     }
 
-    fun messageAnalysisLv3(text: String, callback: (AnalysisResponse) -> Unit) {
+    fun messageAnalysisLv3(
+        text: String,
+        callback: (AnalysisResponse, Long) -> Unit,
+        onError: (String) -> Unit = {}
+    ) {
+        val uuid = getCurrentUuid()
+        if (uuid.isEmpty()) {
+            onError("UUIDが未設定です。設定画面で user_uuid を保存してください。")
+            return
+        }
 
         val json = JSONObject()
         json.put("message", text)
@@ -104,10 +148,12 @@ class MessageAnalysis(private val context: Context) {
             .post(body)
             .build()
 
+        val requestStart = SystemClock.elapsedRealtime()
         client.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
+                onError(e.message ?: "通信エラー")
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -117,7 +163,8 @@ class MessageAnalysis(private val context: Context) {
                 val gson = Gson()
                 val analysis = gson.fromJson(result, AnalysisResponse::class.java)
 
-                callback(analysis)
+                val elapsedMs = SystemClock.elapsedRealtime() - requestStart
+                callback(analysis, elapsedMs)
             }
         })
     }

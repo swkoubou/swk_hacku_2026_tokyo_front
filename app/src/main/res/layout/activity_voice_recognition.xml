@@ -5,111 +5,112 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:backgroundTint="#FFFFFF"
+    android:background="@color/ui_bg"
+    android:paddingHorizontal="@dimen/ui_space_xl"
+    android:paddingTop="@dimen/ui_space_l"
+    android:paddingBottom="@dimen/ui_space_xl"
     tools:context=".VoiceRecognition">
 
-    <ScrollView
-        android:id="@+id/resultScroll"
-        android:layout_width="0dp"
-        android:layout_height="98dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/result_border"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <Button
+        android:id="@+id/toSetting"
+        android:layout_width="64dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="@dimen/ui_space_s"
+        android:text="⚙"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/screenTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_space_m"
+        android:gravity="center"
+        android:text="ずぼらカレンダー"
+        android:textColor="@color/ui_text_primary"
+        android:textSize="@dimen/ui_text_xl"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button"
-        app:layout_constraintVertical_bias="0.0">
-
-        <TextView
-            android:id="@+id/resultText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical"
-            android:textIsSelectable="true" />
-
-    </ScrollView>
+        app:layout_constraintTop_toBottomOf="@id/toSetting" />
 
     <TextView
         android:id="@+id/voiceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/ui_space_xxl"
         android:text="認識結果"
+        android:textColor="@color/ui_text_primary"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button" />
+        app:layout_constraintTop_toBottomOf="@id/screenTitle" />
 
-    <TextView
-        android:id="@+id/errorText"
-        android:layout_width="333dp"
-        android:layout_height="57dp"
-        android:layout_marginBottom="160dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ScrollView
+        android:id="@+id/resultScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/ui_space_m"
+        android:background="@drawable/result_border"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/voiceTextView">
+
+        <TextView
+            android:id="@+id/resultText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/ui_space_m"
+            android:scrollbars="vertical"
+            android:textIsSelectable="true" />
+
+    </ScrollView>
 
     <Button
         android:id="@+id/button"
-        android:layout_width="160dp"
-        android:layout_height="115dp"
+        android:layout_width="200dp"
+        android:layout_height="96dp"
+        android:layout_marginTop="@dimen/ui_space_l"
         android:text="長押しして話す"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/errorText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.396" />
+        app:layout_constraintTop_toBottomOf="@id/resultScroll" />
 
-    <Button
-        android:id="@+id/toList"
-        android:layout_width="119dp"
-        android:layout_height="84dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="64dp"
-        android:text="やることリスト"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <TextView
+        android:id="@+id/errorText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_space_l"
+        android:layout_marginBottom="@dimen/ui_space_m"
+        android:textColor="@color/ui_text_secondary"
+        app:layout_constraintBottom_toTopOf="@id/toConfirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button" />
 
     <Button
         android:id="@+id/toConfirm"
-        android:layout_width="119dp"
-        android:layout_height="84dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="64dp"
-        android:text="予定確認"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="8dp"
+        android:text="📅 予定確認"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/toList"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@id/toList"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/exampleText"
-        android:layout_width="329dp"
-        android:layout_height="67dp"
-        android:gravity="center"
-        android:text="予定を入れましょう！\n例：明日の18時から3月20日はHackU"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.813" />
-
     <Button
-        android:id="@+id/toSetting"
-        android:layout_width="64dp"
+        android:id="@+id/toList"
+        android:layout_width="0dp"
         android:layout_height="64dp"
-        android:layout_marginTop="32dp"
-        android:text="⚙"
-        android:textColorLink="#FFFFFF"
+        android:layout_marginStart="8dp"
+        android:text="✅ やることリスト"
+        app:layout_constraintBottom_toBottomOf="@id/toConfirm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.069"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/toConfirm"
+        app:layout_constraintTop_toTopOf="@id/toConfirm" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

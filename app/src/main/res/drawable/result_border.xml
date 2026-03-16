@@ -2,16 +2,18 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <stroke
-        android:width="2dp"
-        android:color="#000000"/>
+        android:width="1dp"
+        android:color="@color/ui_border"/>
+
+    <solid android:color="@color/ui_card" />
 
     <corners
-        android:radius="8dp"/>
+        android:radius="@dimen/ui_radius_s"/>
 
     <padding
-        android:left="8dp"
-        android:top="8dp"
-        android:right="8dp"
-        android:bottom="8dp"/>
+        android:left="@dimen/ui_space_s"
+        android:top="@dimen/ui_space_s"
+        android:right="@dimen/ui_space_s"
+        android:bottom="@dimen/ui_space_s"/>
 
 </shape>
