@@ -16,6 +16,7 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import okhttp3.OkHttpClient
@@ -59,7 +60,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_feature_settings)
+        WindowInsetsHelper.applySystemBarInsets(findViewById(R.id.main))
 
         topSpacerValueView = findViewById(R.id.tv_top_spacer_value)
         maxVisibleEventsValueView = findViewById(R.id.tv_max_visible_events_value)

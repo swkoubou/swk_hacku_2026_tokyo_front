@@ -200,7 +200,11 @@ fun FullMonthCalendarScreen() {
 
     LaunchedEffect(Unit) { refreshEvents() }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
         if (detailDate == null) {
             Row(
                 modifier = Modifier
@@ -465,6 +469,7 @@ fun FullMonthCalendarScreen() {
             onClick = { showAddDialog = true },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
+                .navigationBarsPadding()
                 .padding(16.dp)
         ) {
             Text("+")

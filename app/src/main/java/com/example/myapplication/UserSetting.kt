@@ -5,8 +5,6 @@ import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
 import android.widget.Toast
 import okhttp3.*
@@ -20,12 +18,7 @@ class UserSetting : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_user_setting)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        WindowInsetsHelper.applySystemBarInsets(findViewById(R.id.main))
 
         val button = findViewById<Button>(R.id.toHome)
         findViewById<Button>(R.id.btnBack).setOnClickListener { finish() }
@@ -78,4 +71,5 @@ class UserSetting : AppCompatActivity() {
             }
         })
     }
+
 }
