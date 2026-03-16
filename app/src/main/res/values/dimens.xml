@@ -6,6 +6,7 @@
     <dimen name="ui_space_l">16dp</dimen>
     <dimen name="ui_space_xl">20dp</dimen>
     <dimen name="ui_space_xxl">24dp</dimen>
+    <dimen name="ui_back_button_height">48dp</dimen>
 
     <dimen name="ui_radius_s">8dp</dimen>
     <dimen name="ui_radius_m">12dp</dimen>
