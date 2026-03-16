@@ -48,6 +48,12 @@ data class EventResponse(
 )
 
 data class YearRequest(val year: String)
+data class DefEventRequest(
+    val start_date: String,
+    val start_time: String?,
+    val end_date: String,
+    val event_name: String
+)
 data class UpdateEventRequest(
     val task_uuid: String,
     val new_start_date: String,
@@ -85,6 +91,12 @@ interface ApiService {
         @Header("user_uuid") uuid: String,
         @Body request: DeleteEventRequest
     ): SuccessResponse
+
+    @POST("def_event")
+    suspend fun defEvent(
+        @Header("user_uuid") uuid: String,
+        @Body request: DefEventRequest
+    ): SuccessResponse
 }
 
 // --- メイン画面 ---
@@ -114,6 +126,7 @@ fun FullMonthCalendarScreen() {
     var detailDate by remember { mutableStateOf<LocalDate?>(null) }
     var selectedEvent by remember { mutableStateOf<EventResponse?>(null) }
     var showEditDialog by remember { mutableStateOf(false) }
+    var showAddDialog by remember { mutableStateOf(false) }
     val today = LocalDate.now()
 
     val scope = rememberCoroutineScope()
@@ -191,10 +204,10 @@ fun FullMonthCalendarScreen() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                    .padding(start = 12.dp, end = 12.dp, top = 14.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TextButton(onClick = { (context as? Activity)?.finish() }) {
+                OutlinedButton(onClick = { (context as? Activity)?.finish() }) {
                     Text("← 戻る")
                 }
             }
@@ -202,7 +215,7 @@ fun FullMonthCalendarScreen() {
                 calendarState = calendarState,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 44.dp),
+                    .padding(top = 56.dp),
                 dayContent = { dayState ->
                     val date = dayState.date
                     val dayEvents = eventsMap[date] ?: emptyList()
@@ -297,7 +310,7 @@ fun FullMonthCalendarScreen() {
 
             Column(modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    TextButton(onClick = { detailDate = null }) { Text("← カレンダーに戻る") }
+                    OutlinedButton(onClick = { detailDate = null }) { Text("← カレンダーに戻る") }
                 }
                 LazyColumn(
                     modifier = Modifier
@@ -409,6 +422,34 @@ fun FullMonthCalendarScreen() {
                     }
                 }
             )
+        }
+
+        if (showAddDialog) {
+            AddEventDialog(
+                onDismiss = { showAddDialog = false },
+                onAdd = { request ->
+                    scope.launch {
+                        try {
+                            val res = apiService.defEvent(userUuid, request)
+                            if (res.success) {
+                                refreshEvents()
+                                showAddDialog = false
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            )
+        }
+
+        FloatingActionButton(
+            onClick = { showAddDialog = true },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Text("+")
         }
     }
 }
@@ -537,5 +578,113 @@ fun EditEventDialog(
             }
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddEventDialog(
+    onDismiss: () -> Unit,
+    onAdd: (DefEventRequest) -> Unit
+) {
+    val context = LocalContext.current
+    val today = LocalDate.now()
+
+    var name by remember { mutableStateOf("") }
+    var startDate by remember { mutableStateOf(today.toString()) }
+    var endDate by remember { mutableStateOf(today.toString()) }
+    var startTime by remember { mutableStateOf<String?>(null) }
+
+    fun showStartDatePicker() {
+        val dateParts = startDate.split("-").map { it.toInt() }
+        DatePickerDialog(context, { _, year, month, dayOfMonth ->
+            startDate = LocalDate.of(year, month + 1, dayOfMonth).toString()
+        }, dateParts[0], dateParts[1] - 1, dateParts[2]).show()
+    }
+
+    fun showEndDatePicker() {
+        val dateParts = endDate.split("-").map { it.toInt() }
+        DatePickerDialog(context, { _, year, month, dayOfMonth ->
+            endDate = LocalDate.of(year, month + 1, dayOfMonth).toString()
+        }, dateParts[0], dateParts[1] - 1, dateParts[2]).show()
+    }
+
+    fun showTimePicker() {
+        val fallbackTime = java.time.LocalTime.now()
+        val timeSource = startTime ?: String.format("%02d:%02d:00", fallbackTime.hour, fallbackTime.minute)
+        val timeParts = timeSource.split(":").map { it.toInt() }
+        TimePickerDialog(context, { _, hourOfDay, minute ->
+            startTime = "%02d:%02d:00".format(hourOfDay, minute)
+        }, timeParts[0], timeParts[1], true).show()
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("予定を追加") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("イベント名") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedCard(onClick = { showStartDatePicker() }, modifier = Modifier.fillMaxWidth()) {
+                    ListItem(
+                        headlineContent = { Text("開始日") },
+                        supportingContent = { Text(startDate) },
+                        trailingContent = { Text("変更", color = MaterialTheme.colorScheme.primary) }
+                    )
+                }
+
+                OutlinedCard(onClick = { showEndDatePicker() }, modifier = Modifier.fillMaxWidth()) {
+                    ListItem(
+                        headlineContent = { Text("終了日") },
+                        supportingContent = { Text(endDate) },
+                        trailingContent = { Text("変更", color = MaterialTheme.colorScheme.primary) }
+                    )
+                }
+
+                OutlinedCard(onClick = { showTimePicker() }, modifier = Modifier.fillMaxWidth()) {
+                    ListItem(
+                        headlineContent = { Text("時刻") },
+                        supportingContent = { Text(formatDisplayTime(startTime)) },
+                        trailingContent = { Text("変更", color = MaterialTheme.colorScheme.primary) }
+                    )
+                }
+
+                TextButton(
+                    onClick = { startTime = null },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("時間未設定にする")
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    if (name.isNotBlank()) {
+                        onAdd(
+                            DefEventRequest(
+                                start_date = startDate,
+                                start_time = startTime,
+                                end_date = endDate,
+                                event_name = name.trim()
+                            )
+                        )
+                    }
+                },
+                enabled = name.isNotBlank()
+            ) {
+                Text("追加")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("キャンセル")
+            }
+        }
+    )
 }
 

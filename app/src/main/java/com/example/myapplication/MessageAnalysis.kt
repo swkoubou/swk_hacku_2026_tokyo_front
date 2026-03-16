@@ -11,8 +11,18 @@ import android.os.SystemClock
 
 class MessageAnalysis(private val context: Context) {
     private val client = OkHttpClient()
+    
+    private fun getCurrentUuid(): String {
+        val appUuid = UuidManager.getUuid(context)?.trim().orEmpty()
+        if (appUuid.isNotEmpty()) return appUuid
 
-    val uuid = UuidManager.getUuid(context) ?: ""
+        val wallpaperUuid = context.getSharedPreferences(
+            WallpaperSettings.PREFS_NAME,
+            Context.MODE_PRIVATE
+        ).getString(WallpaperSettings.KEY_USER_UUID, "")?.trim().orEmpty()
+
+        return wallpaperUuid
+    }
 
     //----------------------------------------------------------
     // 関数名:messageAnalysisLv1
@@ -23,6 +33,11 @@ class MessageAnalysis(private val context: Context) {
         callback: (AnalysisResponse, Long) -> Unit,
         onError: (String) -> Unit = {}
     ) {
+        val uuid = getCurrentUuid()
+        if (uuid.isEmpty()) {
+            onError("UUIDが未設定です。設定画面で user_uuid を保存してください。")
+            return
+        }
 
         val json = JSONObject()
         json.put("message", text)
@@ -65,6 +80,11 @@ class MessageAnalysis(private val context: Context) {
         callback: (AnalysisResponse, Long) -> Unit,
         onError: (String) -> Unit = {}
     ) {
+        val uuid = getCurrentUuid()
+        if (uuid.isEmpty()) {
+            onError("UUIDが未設定です。設定画面で user_uuid を保存してください。")
+            return
+        }
 
         val json = JSONObject()
         json.put("message", text)
@@ -107,6 +127,11 @@ class MessageAnalysis(private val context: Context) {
         callback: (AnalysisResponse, Long) -> Unit,
         onError: (String) -> Unit = {}
     ) {
+        val uuid = getCurrentUuid()
+        if (uuid.isEmpty()) {
+            onError("UUIDが未設定です。設定画面で user_uuid を保存してください。")
+            return
+        }
 
         val json = JSONObject()
         json.put("message", text)
