@@ -31,9 +31,13 @@
     <string name="user_uuid_title">user_uuid</string>
     <string name="user_uuid_description">予定取得APIで使うユーザー識別子です。</string>
     <string name="user_uuid_hint">user_uuidを入力</string>
+    <string name="show_user_uuid_label">user_uuidを表示</string>
+    <string name="generate_user_uuid_button">新規UUIDを生成</string>
     <string name="save_user_uuid_button">user_uuidを保存</string>
     <string name="user_uuid_saved">user_uuidを保存しました</string>
     <string name="user_uuid_required">user_uuid を入力してください</string>
+    <string name="user_uuid_generated">新規user_uuidを生成して保存しました</string>
+    <string name="user_uuid_generate_failed">UUID生成に失敗しました</string>
     <string name="settings_saved">設定を保存しました</string>
     <string name="save_and_back_button">保存して戻る</string>
     <string name="back_button_label">← 戻る</string>

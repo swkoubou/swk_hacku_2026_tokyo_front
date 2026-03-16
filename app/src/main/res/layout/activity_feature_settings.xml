@@ -368,6 +368,20 @@
                 android:padding="@dimen/ui_space_m"
                 android:textSize="@dimen/ui_text_m" />
 
+            <CheckBox
+                android:id="@+id/cb_show_user_uuid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_space_s"
+                android:text="@string/show_user_uuid_label" />
+
+            <Button
+                android:id="@+id/btn_generate_user_uuid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ui_space_s"
+                android:text="@string/generate_user_uuid_button" />
+
             <Button
                 android:id="@+id/btn_save_user_uuid"
                 android:layout_width="match_parent"

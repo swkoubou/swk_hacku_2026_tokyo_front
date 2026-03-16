@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.TypedValue
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.SeekBar
@@ -17,6 +18,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 
 class FeatureSettingsActivity : AppCompatActivity() {
 
@@ -159,6 +164,32 @@ class FeatureSettingsActivity : AppCompatActivity() {
             if (saveUserUuidFromInput()) {
                 Toast.makeText(this, R.string.user_uuid_saved, Toast.LENGTH_SHORT).show()
             }
+        }
+
+        findViewById<Button>(R.id.btn_generate_user_uuid).setOnClickListener {
+            val currentUuid = userUuidInput.text?.toString()?.trim().orEmpty()
+            if (currentUuid.isNotEmpty()) {
+                AlertDialog.Builder(this)
+                    .setTitle("確認")
+                    .setMessage("既にUUIDが設定されています。現在のデータを保持したい場合は、現在のUUIDを必ず控えてください。")
+                    .setPositiveButton("続行") { _, _ ->
+                        generateAndSaveUuid()
+                    }
+                    .setNegativeButton("キャンセル", null)
+                    .show()
+            } else {
+                generateAndSaveUuid()
+            }
+        }
+
+        findViewById<CheckBox>(R.id.cb_show_user_uuid).setOnCheckedChangeListener { _, isChecked ->
+            val cursorPos = userUuidInput.selectionStart.coerceAtLeast(0)
+            userUuidInput.inputType = if (isChecked) {
+                android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            } else {
+                android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+            }
+            userUuidInput.setSelection(cursorPos.coerceAtMost(userUuidInput.text?.length ?: 0))
         }
     }
 
@@ -411,5 +442,47 @@ class FeatureSettingsActivity : AppCompatActivity() {
             startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER))
             Toast.makeText(this, R.string.wallpaper_choose_fallback, Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun generateAndSaveUuid() {
+        val request = Request.Builder()
+            .url("https://hackutokyo2026.yoimiya.net/gen_uuid")
+            .post("".toRequestBody())
+            .build()
+
+        OkHttpClient().newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
+                runOnUiThread {
+                    Toast.makeText(this@FeatureSettingsActivity, R.string.user_uuid_generate_failed, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                val body = response.body?.string().orEmpty()
+                val generatedUuid = try {
+                    JSONObject(body).optString("user_uuid", "")
+                } catch (_: Exception) {
+                    ""
+                }
+
+                if (generatedUuid.isBlank()) {
+                    runOnUiThread {
+                        Toast.makeText(this@FeatureSettingsActivity, R.string.user_uuid_generate_failed, Toast.LENGTH_SHORT).show()
+                    }
+                    return
+                }
+
+                getSharedPreferences(WallpaperSettings.PREFS_NAME, MODE_PRIVATE)
+                    .edit()
+                    .putString(WallpaperSettings.KEY_USER_UUID, generatedUuid)
+                    .apply()
+                UuidManager.saveUuid(this@FeatureSettingsActivity, generatedUuid)
+
+                runOnUiThread {
+                    userUuidInput.setText(generatedUuid)
+                    Toast.makeText(this@FeatureSettingsActivity, R.string.user_uuid_generated, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 }
