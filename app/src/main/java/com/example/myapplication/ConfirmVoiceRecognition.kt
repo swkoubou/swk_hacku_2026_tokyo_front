@@ -120,13 +120,15 @@ class ConfirmVoiceRecognition : AppCompatActivity() {
                     }
 
                     runOnUiThread {
-                        val msg = if (success) "予定を追加しました" else "登録に失敗しました"
-                        AlertDialog.Builder(this@ConfirmVoiceRecognition)
-                            .setMessage(msg)
-                            .setPositiveButton("OK") { _, _ ->
-                                if (success) finishAffinity()
-                            }
-                            .show()
+                        if (success) {
+                            // 音声入力フローでは追加成功後の確認ダイアログを出さない
+                            finishAffinity()
+                        } else {
+                            AlertDialog.Builder(this@ConfirmVoiceRecognition)
+                                .setMessage("登録に失敗しました")
+                                .setPositiveButton("OK", null)
+                                .show()
+                        }
                     }
                 }
             })

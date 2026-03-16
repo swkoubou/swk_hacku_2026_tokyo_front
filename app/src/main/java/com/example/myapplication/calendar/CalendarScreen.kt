@@ -127,6 +127,7 @@ fun FullMonthCalendarScreen() {
     var selectedEvent by remember { mutableStateOf<EventResponse?>(null) }
     var showEditDialog by remember { mutableStateOf(false) }
     var showAddDialog by remember { mutableStateOf(false) }
+    var showAddSuccessDialog by remember { mutableStateOf(false) }
     val today = LocalDate.now()
 
     val scope = rememberCoroutineScope()
@@ -207,7 +208,7 @@ fun FullMonthCalendarScreen() {
                     .padding(start = 12.dp, end = 12.dp, top = 14.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                OutlinedButton(onClick = { (context as? Activity)?.finish() }) {
+                Button(onClick = { (context as? Activity)?.finish() }) {
                     Text("← 戻る")
                 }
             }
@@ -310,7 +311,7 @@ fun FullMonthCalendarScreen() {
 
             Column(modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    OutlinedButton(onClick = { detailDate = null }) { Text("← カレンダーに戻る") }
+                    Button(onClick = { detailDate = null }) { Text("← カレンダーに戻る") }
                 }
                 LazyColumn(
                     modifier = Modifier
@@ -434,10 +435,24 @@ fun FullMonthCalendarScreen() {
                             if (res.success) {
                                 refreshEvents()
                                 showAddDialog = false
+                                showAddSuccessDialog = true
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
+                    }
+                }
+            )
+        }
+
+        if (showAddSuccessDialog) {
+            AlertDialog(
+                onDismissRequest = { showAddSuccessDialog = false },
+                title = { Text("予定を追加しました") },
+                text = { Text("カレンダーに反映しました。内容を確認してください。") },
+                confirmButton = {
+                    TextButton(onClick = { showAddSuccessDialog = false }) {
+                        Text("OK")
                     }
                 }
             )
