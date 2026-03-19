@@ -53,6 +53,14 @@ by team SWK
 - 言語: Kotlin
 - フレームワーク: Android SDK
 - ライブラリ:
+
+| ライブラリ | 用途 | ライセンス  |
+| ------------- | ------------- | -------------  |
+| Content Cell  | Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  | Content Cell  |
+
+---
+
   - OkHttp
   - Retrofit
   - Gson
@@ -60,10 +68,4 @@ by team SWK
   - Jetpack Compose
   - Navigation Compose
 
-### ライセンス
-| ライブラリ | 用途 | ライセンス  |
-| ------------- | ------------- | -------------  |
-| Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  |
 
----
