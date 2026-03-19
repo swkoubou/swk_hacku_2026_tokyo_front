@@ -16,23 +16,8 @@ by team SWK
 ---
 
 ## アプリ画面
-| Home画面 | 詳細画面 |
-|---------|---------|
-
-| <img width="392" height="850" alt="ホーム画面" src="https://github.com/user-attachments/assets/efe5220a-858e-4a2c-96e8-38e2501210a7" /> | ![detail](./images/detail.png) |
-
----
-
-## 技術スタック
-- 言語: Kotlin
-- フレームワーク: Android SDK
-- ライブラリ:
-  - OkHttp
-  - Retrofit
-  - Gson
-  - Compose Calendar
-  - Jetpack Compose
-  - Navigation Compose
+| ホーム画面 | <img width="392" height="850" alt="ホーム画面" src="https://github.com/user-attachments/assets/efe5220a-858e-4a2c-96e8-38e2501210a7" /> |
+| 予定確認画面 | ![detail](./images/detail.png) |
 
 ---
 
@@ -49,3 +34,18 @@ by team SWK
     │   └── robots.txt
     └── vite.config.js
 ```
+
+---
+
+## 技術スタック
+- 言語: Kotlin
+- フレームワーク: Android SDK
+- ライブラリ:
+  - OkHttp
+  - Retrofit
+  - Gson
+  - Compose Calendar
+  - Jetpack Compose
+  - Navigation Compose
+
+---
