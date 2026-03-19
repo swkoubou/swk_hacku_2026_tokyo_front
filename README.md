@@ -2,6 +2,8 @@
 by team SWK
 <br>バックエンド[https://github.com/swkoubou/swk_hacku_2026_tokyo_backend](https://github.com/swkoubou/swk_hacku_2026_tokyo_backend)
 
+---
+
 ## 概要
 このアプリはズボラな人でも予定を管理できるようにすることを目的としたスマホアプリです。  
 主に以下のことができます。
@@ -21,20 +23,15 @@ by team SWK
 ---
 
 ## 技術スタック
-
-- **Language**: Kotlin  
-- **UI**: Jetpack Compose (Material3)  
-- **Navigation**: Navigation Compose  
-- **Networking**: Retrofit / OkHttp / Gson  
-- **UI Libraries**: Compose Calendar  
-
-## 🛠 Tech Stack
-- 言語: Kotlin / Swift / Dart など
-- フレームワーク: Android SDK / Flutter / React Native
+- 言語: Kotlin
+- フレームワーク: Android SDK
 - ライブラリ:
+  - OkHttp
   - Retrofit
-  - Glide
-  - Room
+  - Gson
+  - Compose Calendar
+  - Jetpack Compose
+  - Navigation Compose
 
 ---
 
