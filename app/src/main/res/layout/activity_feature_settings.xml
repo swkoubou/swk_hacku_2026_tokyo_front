@@ -211,6 +211,28 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/row_color_header_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/color_header_text_label"
+                    android:textSize="15sp" />
+
+                <View
+                    android:id="@+id/view_color_header_text"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/row_color_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -228,6 +250,28 @@
 
                 <View
                     android:id="@+id/view_color_card"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/row_color_card_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/color_card_text_label"
+                    android:textSize="15sp" />
+
+                <View
+                    android:id="@+id/view_color_card_text"
                     android:layout_width="36dp"
                     android:layout_height="36dp" />
             </LinearLayout>
