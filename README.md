@@ -56,16 +56,11 @@ by team SWK
 
 | ライブラリ | 用途 | ライセンス  |
 | ------------- | ------------- | -------------  |
-| Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  |
+| OkHttp |  |  |
+| Retrofit |  |  |
+| Gson |  |  |
+| Compose Calendar |  |  |
+| Jetpack Compose |  |  |
+| Navigation Compose |  |  |
 
 ---
-
-  - OkHttp
-  - Retrofit
-  - Gson
-  - Compose Calendar
-  - Jetpack Compose
-  - Navigation Compose
-
-
