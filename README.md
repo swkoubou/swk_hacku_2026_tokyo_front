@@ -20,6 +20,14 @@ by team SWK
 
 ---
 
+## 技術スタック
+
+- **Language**: Kotlin  
+- **UI**: Jetpack Compose (Material3)  
+- **Navigation**: Navigation Compose  
+- **Networking**: Retrofit / OkHttp / Gson  
+- **UI Libraries**: Compose Calendar  
+
 ## 🛠 Tech Stack
 - 言語: Kotlin / Swift / Dart など
 - フレームワーク: Android SDK / Flutter / React Native
