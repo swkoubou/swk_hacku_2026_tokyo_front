@@ -1,7 +1,7 @@
-# swk_hacku_2026_tokyo
-team swk
+## 1.ずぼらカレンダー
+by team SWK
 
-## 4.ディレクトリ構成
+## 4.UI構成
 ```
 .
 └── laravel
