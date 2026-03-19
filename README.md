@@ -18,7 +18,8 @@ by team SWK
 ## アプリ画面
 | Home画面 | 詳細画面 |
 |---------|---------|
-| ![home](./images/home.png) | ![detail](./images/detail.png) |
+
+| <img width="392" height="850" alt="ホーム画面" src="https://github.com/user-attachments/assets/efe5220a-858e-4a2c-96e8-38e2501210a7" /> | ![detail](./images/detail.png) |
 
 ---
 
