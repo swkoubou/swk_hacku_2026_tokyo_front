@@ -8,9 +8,16 @@ import java.io.IOException
 import com.google.gson.Gson
 import android.content.Context
 import android.os.SystemClock
+import java.util.concurrent.TimeUnit
 
 class MessageAnalysis(private val context: Context) {
     private val client = OkHttpClient()
+    private val lv3Client = client.newBuilder()
+        .connectTimeout(20, TimeUnit.SECONDS)
+        .readTimeout(20, TimeUnit.SECONDS)
+        .writeTimeout(20, TimeUnit.SECONDS)
+        .callTimeout(20, TimeUnit.SECONDS)
+        .build()
     
     private fun getCurrentUuid(): String {
         val appUuid = UuidManager.getUuid(context)?.trim().orEmpty()
@@ -55,7 +62,7 @@ class MessageAnalysis(private val context: Context) {
             .build()
 
         val requestStart = SystemClock.elapsedRealtime()
-        client.newCall(request).enqueue(object : Callback {
+        lv3Client.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
