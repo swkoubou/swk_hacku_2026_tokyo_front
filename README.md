@@ -56,14 +56,13 @@ by team SWK
 ---
 
 ## ライブラリ
-<br>本プロジェクトでは以下のOSSを利用しています。各OSSの著作権およびライセンスは各開発者・団体に帰属します。
+本プロジェクトでは以下のOSSを利用しています。各OSSの著作権およびライセンスは各開発者・団体に帰属します。
 | ライブラリ | 用途 | ライセンス  |
 | ------------- | ------------- | -------------  |
-| OkHttp |  | Apache License 2.0 |
-| Retrofit |  | Apache License 2.0 |
-| Gson |  | Apache License 2.0 |
-| Compose Calendar |  | Apache License 2.0 |
-| Jetpack Compose |  |  |
-| Navigation Compose |  |  |
+| Retrofit | API通信を行うためのライブラリ | Apache License 2.0 |
+| OkHttp | HTTP通信の基盤ライブラリ | Apache License 2.0 |
+| Gson | JSONをオブジェクトに変換 | Apache License 2.0 |
+| Compose Calendar | カレンダーUIを表示 | Apache License 2.0 |
+| AndroidX / Jetpack Compose | アプリの画面を作るためのフレームワーク | Apache License 2.0 |
 
 ---
