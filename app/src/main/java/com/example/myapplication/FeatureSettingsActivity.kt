@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.TextUtils
@@ -14,6 +15,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.SeekBar
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -40,6 +42,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
     private lateinit var topSpacerValueView: TextView
     private lateinit var maxVisibleEventsValueView: TextView
     private lateinit var userUuidInput: EditText
+    private lateinit var settingsScrollView: ScrollView
 
     private lateinit var colorBackgroundPreview: android.view.View
     private lateinit var colorPanelPreview: android.view.View
@@ -65,8 +68,12 @@ class FeatureSettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_feature_settings)
-        WindowInsetsHelper.applySystemBarInsets(findViewById(R.id.main))
+        WindowInsetsHelper.applySystemBarInsets(
+            view = findViewById(R.id.main),
+            includeImeBottomInset = true
+        )
 
+        settingsScrollView = findViewById(R.id.main)
         topSpacerValueView = findViewById(R.id.tv_top_spacer_value)
         maxVisibleEventsValueView = findViewById(R.id.tv_max_visible_events_value)
         userUuidInput = findViewById(R.id.et_user_uuid)
@@ -198,6 +205,21 @@ class FeatureSettingsActivity : AppCompatActivity() {
             }
             userUuidInput.setSelection(cursorPos.coerceAtMost(userUuidInput.text?.length ?: 0))
         }
+
+        userUuidInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                ensureUuidFieldVisible()
+            }
+        }
+    }
+
+    private fun ensureUuidFieldVisible() {
+        userUuidInput.postDelayed({
+            val rect = Rect()
+            userUuidInput.getDrawingRect(rect)
+            settingsScrollView.offsetDescendantRectToMyCoords(userUuidInput, rect)
+            settingsScrollView.requestChildRectangleOnScreen(userUuidInput, rect, true)
+        }, 160)
     }
 
     private fun saveUserUuidFromInput(): Boolean {

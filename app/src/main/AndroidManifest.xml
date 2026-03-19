@@ -55,7 +55,8 @@
             android:exported="false" />
         <activity
             android:name=".FeatureSettingsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- Launcher Activity -->
         <activity
