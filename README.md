@@ -53,13 +53,13 @@ by team SWK
 - 言語: Kotlin
 - フレームワーク: Android SDK
 - ライブラリ:
-
+<br>本プロジェクトでは以下のOSSを利用しています。各OSSの著作権およびライセンスは各開発者・団体に帰属します。
 | ライブラリ | 用途 | ライセンス  |
 | ------------- | ------------- | -------------  |
-| OkHttp |  |  |
-| Retrofit |  |  |
-| Gson |  |  |
-| Compose Calendar |  |  |
+| OkHttp |  | Apache License 2.0 |
+| Retrofit |  | Apache License 2.0 |
+| Gson |  | Apache License 2.0 |
+| Compose Calendar |  | Apache License 2.0 |
 | Jetpack Compose |  |  |
 | Navigation Compose |  |  |
 
