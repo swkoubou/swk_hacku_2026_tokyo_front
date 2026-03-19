@@ -50,7 +50,7 @@ by team SWK
 ---
 
 ## 技術スタック
-- 言語: Kotlin
+- 言語: Kotlin | Java
 - フレームワーク: Android SDK
 
 ---
