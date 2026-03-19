@@ -46,6 +46,7 @@ public class EventWallpaperService extends WallpaperService {
         private final Paint eventMetaPaint = new Paint();
         private final Paint doneEventNamePaint = new Paint();
         private final Paint doneEventMetaPaint = new Paint();
+        private final Paint undoneCountPaint = new Paint();
         private final Paint statusPaint = new Paint();
         private final Paint panelPaint = new Paint();
         private final Paint headerPaint = new Paint();
@@ -100,6 +101,11 @@ public class EventWallpaperService extends WallpaperService {
 
             doneEventMetaPaint.set(eventMetaPaint);
             doneEventMetaPaint.setStrikeThruText(true);
+
+            undoneCountPaint.setColor(Color.parseColor(WallpaperSettings.DEFAULT_COLOR_UNDONE_COUNT));
+            undoneCountPaint.setTextSize(40f);
+            undoneCountPaint.setAntiAlias(true);
+            undoneCountPaint.setFakeBoldText(true);
 
             statusPaint.setColor(Color.parseColor("#FDE68A"));
             statusPaint.setTextSize(38f);
@@ -283,6 +289,9 @@ public class EventWallpaperService extends WallpaperService {
                 float headerY = headerRect.top + 66f;
                 canvas.drawText("最終取得時間  " + latestFetchTime, textLeft, headerY, eventMetaPaint);
                 canvas.drawText(getTodayTitle(), textLeft, headerY + 84f, titlePaint);
+                String undoneCountText = "未完了：" + getUndoneCount();
+                float undoneX = headerRect.right - 24f - undoneCountPaint.measureText(undoneCountText);
+                canvas.drawText(undoneCountText, undoneX, headerY + 84f, undoneCountPaint);
 
                 float y = headerRect.bottom + 24f;
                 if (!TextUtils.isEmpty(statusMessage)) {
@@ -579,6 +588,16 @@ public class EventWallpaperService extends WallpaperService {
             return LocalDate.now().getDayOfMonth() + "日の予定";
         }
 
+        private int getUndoneCount() {
+            int count = 0;
+            for (EventItem item : latestEvents) {
+                if (!item.done) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
         private String buildEventMeta(EventItem item) {
             String start = formatDateForDisplay(item.startDate);
             String end = formatDateForDisplay(item.endDate);
@@ -673,6 +692,10 @@ public class EventWallpaperService extends WallpaperService {
             );
             doneEventNamePaint.setColor(doneTextColor);
             doneEventMetaPaint.setColor(doneTextColor);
+            undoneCountPaint.setColor(getStoredColor(
+                    WallpaperSettings.KEY_COLOR_UNDONE_COUNT,
+                    WallpaperSettings.DEFAULT_COLOR_UNDONE_COUNT
+            ));
         }
 
         private int getMaxVisibleEvents() {
