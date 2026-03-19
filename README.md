@@ -35,10 +35,6 @@ by team SWK
 
 ---
 
-## 📂 Project Structure
-
-
-
 ## UI構成
 ```
 .
