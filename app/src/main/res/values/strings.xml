@@ -23,6 +23,7 @@
     <string name="color_due_today_label">当日期限の強調色</string>
     <string name="color_done_card_label">完了カード色</string>
     <string name="color_done_text_label">完了フォント色</string>
+    <string name="color_undone_count_label">未完了カウント色</string>
     <string name="save_colors_button">配色を保存</string>
     <string name="reset_colors_button">配色をデフォルトに戻す</string>
     <string name="colors_saved">配色を保存しました</string>

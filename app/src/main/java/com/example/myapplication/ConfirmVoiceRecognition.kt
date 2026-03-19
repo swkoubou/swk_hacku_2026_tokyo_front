@@ -13,10 +13,23 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import org.json.JSONObject
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 class ConfirmVoiceRecognition : AppCompatActivity() {
 
     private val messageAnalysis by lazy { MessageAnalysis(this) }
+    private val displayTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+    private val apiTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+    private val flexibleTimeParsers = listOf(
+        DateTimeFormatter.ofPattern("H:mm:ss"),
+        DateTimeFormatter.ofPattern("HH:mm:ss"),
+        DateTimeFormatter.ofPattern("H:mm"),
+        DateTimeFormatter.ofPattern("HH:mm"),
+        DateTimeFormatter.ofPattern("H:m"),
+        DateTimeFormatter.ofPattern("HH:m")
+    )
 
     private var currentLv = 1
     private lateinit var message: String
@@ -326,20 +339,45 @@ class ConfirmVoiceRecognition : AppCompatActivity() {
 
     private fun formatDisplayTime(time: String?): String {
         if (time.isNullOrBlank()) return "未設定"
-        return if (time.length >= 5) time.substring(0, 5) else time
+        val parsed = parseFlexibleTime(time)
+        if (parsed != null) {
+            return parsed.format(displayTimeFormatter)
+        }
+        return time.trim().removeSuffix(":")
     }
 
     private fun formatEditableTime(time: String?): String {
         if (time.isNullOrBlank()) return ""
-        return if (time.length >= 5) time.substring(0, 5) else time
+        val parsed = parseFlexibleTime(time)
+        if (parsed != null) {
+            return parsed.format(displayTimeFormatter)
+        }
+        return time.trim().removeSuffix(":")
     }
 
     private fun normalizeTimeForApi(input: String): String? {
         if (input.isBlank()) return null
         val trimmed = input.trim()
-        return when (trimmed.length) {
-            5 -> "$trimmed:00" // HH:mm -> HH:mm:00
-            else -> trimmed
+        val parsed = parseFlexibleTime(trimmed)
+        if (parsed != null) {
+            return parsed.format(apiTimeFormatter)
+        }
+        return trimmed
+    }
+
+    private fun parseFlexibleTime(raw: String): LocalTime? {
+        val value = raw.trim()
+        for (formatter in flexibleTimeParsers) {
+            try {
+                return LocalTime.parse(value, formatter)
+            } catch (_: DateTimeParseException) {
+                // try next formatter
+            }
+        }
+        try {
+            return LocalTime.parse(value)
+        } catch (_: DateTimeParseException) {
+            return null
         }
     }
 }

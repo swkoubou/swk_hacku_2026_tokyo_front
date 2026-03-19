@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.TextUtils
@@ -14,6 +15,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.SeekBar
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -30,7 +32,8 @@ class FeatureSettingsActivity : AppCompatActivity() {
         "#0B1020", "#111827", "#1F2937", "#334155",
         "#1B1F2E", "#222D45", "#273554", "#334E68",
         "#60A5FA", "#38BDF8", "#22D3EE", "#34D399",
-        "#A78BFA", "#F472B6", "#FB7185", "#F59E0B",
+        "#A78BFA", "#F472B6", "#FB7185", "#FF0000",
+        "#F59E0B",
         "#FBBF24", "#84CC16", "#10B981", "#94A3B8",
         "#FFFFFF", "#F8FAFC", "#F1F5F9", "#E2E8F0",
         "#E5E7EB", "#D1D5DB", "#CBD5E1", "#F5F5F5"
@@ -39,6 +42,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
     private lateinit var topSpacerValueView: TextView
     private lateinit var maxVisibleEventsValueView: TextView
     private lateinit var userUuidInput: EditText
+    private lateinit var settingsScrollView: ScrollView
 
     private lateinit var colorBackgroundPreview: android.view.View
     private lateinit var colorPanelPreview: android.view.View
@@ -48,6 +52,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
     private lateinit var colorDueTodayPreview: android.view.View
     private lateinit var colorDoneCardPreview: android.view.View
     private lateinit var colorDoneTextPreview: android.view.View
+    private lateinit var colorUndoneCountPreview: android.view.View
 
     private lateinit var colorBackground: String
     private lateinit var colorPanel: String
@@ -57,13 +62,18 @@ class FeatureSettingsActivity : AppCompatActivity() {
     private lateinit var colorDueToday: String
     private lateinit var colorDoneCard: String
     private lateinit var colorDoneText: String
+    private lateinit var colorUndoneCount: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_feature_settings)
-        WindowInsetsHelper.applySystemBarInsets(findViewById(R.id.main))
+        WindowInsetsHelper.applySystemBarInsets(
+            view = findViewById(R.id.main),
+            includeImeBottomInset = true
+        )
 
+        settingsScrollView = findViewById(R.id.main)
         topSpacerValueView = findViewById(R.id.tv_top_spacer_value)
         maxVisibleEventsValueView = findViewById(R.id.tv_max_visible_events_value)
         userUuidInput = findViewById(R.id.et_user_uuid)
@@ -75,6 +85,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
         colorDueTodayPreview = findViewById(R.id.view_color_due_today)
         colorDoneCardPreview = findViewById(R.id.view_color_done_card)
         colorDoneTextPreview = findViewById(R.id.view_color_done_text)
+        colorUndoneCountPreview = findViewById(R.id.view_color_undone_count)
 
         setupTopSpacerControls()
         setupMaxVisibleEventsControls()
@@ -194,6 +205,21 @@ class FeatureSettingsActivity : AppCompatActivity() {
             }
             userUuidInput.setSelection(cursorPos.coerceAtMost(userUuidInput.text?.length ?: 0))
         }
+
+        userUuidInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                ensureUuidFieldVisible()
+            }
+        }
+    }
+
+    private fun ensureUuidFieldVisible() {
+        userUuidInput.postDelayed({
+            val rect = Rect()
+            userUuidInput.getDrawingRect(rect)
+            settingsScrollView.offsetDescendantRectToMyCoords(userUuidInput, rect)
+            settingsScrollView.requestChildRectangleOnScreen(userUuidInput, rect, true)
+        }, 160)
     }
 
     private fun saveUserUuidFromInput(): Boolean {
@@ -217,6 +243,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
         colorDueToday = readColor(WallpaperSettings.KEY_COLOR_DUE_TODAY, WallpaperSettings.DEFAULT_COLOR_DUE_TODAY)
         colorDoneCard = readColor(WallpaperSettings.KEY_COLOR_DONE_CARD, WallpaperSettings.DEFAULT_COLOR_DONE_CARD)
         colorDoneText = readColor(WallpaperSettings.KEY_COLOR_DONE_TEXT, WallpaperSettings.DEFAULT_COLOR_DONE_TEXT)
+        colorUndoneCount = readColor(WallpaperSettings.KEY_COLOR_UNDONE_COUNT, WallpaperSettings.DEFAULT_COLOR_UNDONE_COUNT)
         renderAllColorPreviews()
 
         findViewById<LinearLayout>(R.id.row_color_background).setOnClickListener {
@@ -275,6 +302,13 @@ class FeatureSettingsActivity : AppCompatActivity() {
                 saveColorsFromState()
             }
         }
+        findViewById<LinearLayout>(R.id.row_color_undone_count).setOnClickListener {
+            showColorPaletteDialog(getString(R.string.color_undone_count_label), colorUndoneCount) { selected ->
+                colorUndoneCount = selected
+                updateColorPreview(colorUndoneCountPreview, colorUndoneCount)
+                saveColorsFromState()
+            }
+        }
 
         findViewById<Button>(R.id.btn_save_colors).setOnClickListener {
             saveColorsFromState()
@@ -291,6 +325,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
             colorDueToday = WallpaperSettings.DEFAULT_COLOR_DUE_TODAY
             colorDoneCard = WallpaperSettings.DEFAULT_COLOR_DONE_CARD
             colorDoneText = WallpaperSettings.DEFAULT_COLOR_DONE_TEXT
+            colorUndoneCount = WallpaperSettings.DEFAULT_COLOR_UNDONE_COUNT
             renderAllColorPreviews()
             saveColorsFromState()
             Toast.makeText(this, R.string.colors_reset, Toast.LENGTH_SHORT).show()
@@ -323,6 +358,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
             .putString(WallpaperSettings.KEY_COLOR_DUE_TODAY, colorDueToday)
             .putString(WallpaperSettings.KEY_COLOR_DONE_CARD, colorDoneCard)
             .putString(WallpaperSettings.KEY_COLOR_DONE_TEXT, colorDoneText)
+            .putString(WallpaperSettings.KEY_COLOR_UNDONE_COUNT, colorUndoneCount)
             .apply()
     }
 
@@ -335,6 +371,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
         updateColorPreview(colorDueTodayPreview, colorDueToday)
         updateColorPreview(colorDoneCardPreview, colorDoneCard)
         updateColorPreview(colorDoneTextPreview, colorDoneText)
+        updateColorPreview(colorUndoneCountPreview, colorUndoneCount)
     }
 
     private fun updateColorPreview(preview: android.view.View, hexColor: String) {

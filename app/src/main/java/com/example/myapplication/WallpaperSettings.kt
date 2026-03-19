@@ -13,6 +13,7 @@ object WallpaperSettings {
     const val KEY_COLOR_DUE_TODAY = "color_due_today"
     const val KEY_COLOR_DONE_CARD = "color_done_card"
     const val KEY_COLOR_DONE_TEXT = "color_done_text"
+    const val KEY_COLOR_UNDONE_COUNT = "color_undone_count"
 
     const val DEFAULT_TOP_SPACER_DP = 48
     const val MAX_TOP_SPACER_DP = 240
@@ -28,4 +29,5 @@ object WallpaperSettings {
     const val DEFAULT_COLOR_DUE_TODAY = "#F59E0B"
     const val DEFAULT_COLOR_DONE_CARD = "#1A2236"
     const val DEFAULT_COLOR_DONE_TEXT = "#98A4C4"
+    const val DEFAULT_COLOR_UNDONE_COUNT = "#FF0000"
 }
