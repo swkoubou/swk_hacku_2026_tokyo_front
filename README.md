@@ -1,6 +1,6 @@
 # ずぼらカレンダー
 by team SWK
-<br>バックエンド[https://github.com/swkoubou/swk_hacku_2026_tokyo_backend](https://github.com/swkoubou/swk_hacku_2026_tokyo_backend)
+<br><br>バックエンド[https://github.com/swkoubou/swk_hacku_2026_tokyo_backend](https://github.com/swkoubou/swk_hacku_2026_tokyo_backend)
 
 ---
 
@@ -15,7 +15,7 @@ by team SWK
 
 ---
 
-## 📸 Screenshots
+## アプリ画面
 | Home画面 | 詳細画面 |
 |---------|---------|
 | ![home](./images/home.png) | ![detail](./images/detail.png) |
