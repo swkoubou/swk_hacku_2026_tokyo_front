@@ -42,6 +42,7 @@ public class EventWallpaperService extends WallpaperService {
         private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         private final Paint titlePaint = new Paint();
+        private final Paint headerMetaPaint = new Paint();
         private final Paint eventNamePaint = new Paint();
         private final Paint eventMetaPaint = new Paint();
         private final Paint doneEventNamePaint = new Paint();
@@ -87,6 +88,10 @@ public class EventWallpaperService extends WallpaperService {
             titlePaint.setTextSize(56f);
             titlePaint.setAntiAlias(true);
             titlePaint.setFakeBoldText(true);
+
+            headerMetaPaint.setColor(Color.parseColor("#C7D2FE"));
+            headerMetaPaint.setTextSize(36f);
+            headerMetaPaint.setAntiAlias(true);
 
             eventNamePaint.setColor(Color.WHITE);
             eventNamePaint.setTextSize(46f);
@@ -287,7 +292,7 @@ public class EventWallpaperService extends WallpaperService {
 
                 float textLeft = headerRect.left + 24f;
                 float headerY = headerRect.top + 66f;
-                canvas.drawText("最終取得時間  " + latestFetchTime, textLeft, headerY, eventMetaPaint);
+                canvas.drawText("最終取得時間  " + latestFetchTime, textLeft, headerY, headerMetaPaint);
                 canvas.drawText(getTodayTitle(), textLeft, headerY + 84f, titlePaint);
                 String undoneCountText = "未完了：" + getUndoneCount();
                 float undoneX = headerRect.right - 24f - undoneCountPaint.measureText(undoneCountText);
@@ -665,10 +670,22 @@ public class EventWallpaperService extends WallpaperService {
                     WallpaperSettings.KEY_COLOR_HEADER,
                     WallpaperSettings.DEFAULT_COLOR_HEADER
             ));
+            int headerTextColor = getStoredColor(
+                    WallpaperSettings.KEY_COLOR_HEADER_TEXT,
+                    WallpaperSettings.DEFAULT_COLOR_HEADER_TEXT
+            );
+            titlePaint.setColor(headerTextColor);
+            headerMetaPaint.setColor(headerTextColor);
             cardPaint.setColor(getStoredColor(
                     WallpaperSettings.KEY_COLOR_CARD,
                     WallpaperSettings.DEFAULT_COLOR_CARD
             ));
+            int cardTextColor = getStoredColor(
+                    WallpaperSettings.KEY_COLOR_CARD_TEXT,
+                    WallpaperSettings.DEFAULT_COLOR_CARD_TEXT
+            );
+            eventNamePaint.setColor(cardTextColor);
+            eventMetaPaint.setColor(cardTextColor);
             int accentColor = getStoredColor(
                     WallpaperSettings.KEY_COLOR_ACCENT,
                     WallpaperSettings.DEFAULT_COLOR_ACCENT

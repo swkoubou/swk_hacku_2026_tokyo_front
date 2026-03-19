@@ -47,7 +47,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
     private lateinit var colorBackgroundPreview: android.view.View
     private lateinit var colorPanelPreview: android.view.View
     private lateinit var colorHeaderPreview: android.view.View
+    private lateinit var colorHeaderTextPreview: android.view.View
     private lateinit var colorCardPreview: android.view.View
+    private lateinit var colorCardTextPreview: android.view.View
     private lateinit var colorAccentPreview: android.view.View
     private lateinit var colorDueTodayPreview: android.view.View
     private lateinit var colorDoneCardPreview: android.view.View
@@ -57,7 +59,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
     private lateinit var colorBackground: String
     private lateinit var colorPanel: String
     private lateinit var colorHeader: String
+    private lateinit var colorHeaderText: String
     private lateinit var colorCard: String
+    private lateinit var colorCardText: String
     private lateinit var colorAccent: String
     private lateinit var colorDueToday: String
     private lateinit var colorDoneCard: String
@@ -80,7 +84,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
         colorBackgroundPreview = findViewById(R.id.view_color_background)
         colorPanelPreview = findViewById(R.id.view_color_panel)
         colorHeaderPreview = findViewById(R.id.view_color_header)
+        colorHeaderTextPreview = findViewById(R.id.view_color_header_text)
         colorCardPreview = findViewById(R.id.view_color_card)
+        colorCardTextPreview = findViewById(R.id.view_color_card_text)
         colorAccentPreview = findViewById(R.id.view_color_accent)
         colorDueTodayPreview = findViewById(R.id.view_color_due_today)
         colorDoneCardPreview = findViewById(R.id.view_color_done_card)
@@ -238,7 +244,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
         colorBackground = readColor(WallpaperSettings.KEY_COLOR_BACKGROUND, WallpaperSettings.DEFAULT_COLOR_BACKGROUND)
         colorPanel = readColor(WallpaperSettings.KEY_COLOR_PANEL, WallpaperSettings.DEFAULT_COLOR_PANEL)
         colorHeader = readColor(WallpaperSettings.KEY_COLOR_HEADER, WallpaperSettings.DEFAULT_COLOR_HEADER)
+        colorHeaderText = readColor(WallpaperSettings.KEY_COLOR_HEADER_TEXT, WallpaperSettings.DEFAULT_COLOR_HEADER_TEXT)
         colorCard = readColor(WallpaperSettings.KEY_COLOR_CARD, WallpaperSettings.DEFAULT_COLOR_CARD)
+        colorCardText = readColor(WallpaperSettings.KEY_COLOR_CARD_TEXT, WallpaperSettings.DEFAULT_COLOR_CARD_TEXT)
         colorAccent = readColor(WallpaperSettings.KEY_COLOR_ACCENT, WallpaperSettings.DEFAULT_COLOR_ACCENT)
         colorDueToday = readColor(WallpaperSettings.KEY_COLOR_DUE_TODAY, WallpaperSettings.DEFAULT_COLOR_DUE_TODAY)
         colorDoneCard = readColor(WallpaperSettings.KEY_COLOR_DONE_CARD, WallpaperSettings.DEFAULT_COLOR_DONE_CARD)
@@ -267,10 +275,24 @@ class FeatureSettingsActivity : AppCompatActivity() {
                 saveColorsFromState()
             }
         }
+        findViewById<LinearLayout>(R.id.row_color_header_text).setOnClickListener {
+            showColorPaletteDialog(getString(R.string.color_header_text_label), colorHeaderText) { selected ->
+                colorHeaderText = selected
+                updateColorPreview(colorHeaderTextPreview, colorHeaderText)
+                saveColorsFromState()
+            }
+        }
         findViewById<LinearLayout>(R.id.row_color_card).setOnClickListener {
             showColorPaletteDialog(getString(R.string.color_card_label), colorCard) { selected ->
                 colorCard = selected
                 updateColorPreview(colorCardPreview, colorCard)
+                saveColorsFromState()
+            }
+        }
+        findViewById<LinearLayout>(R.id.row_color_card_text).setOnClickListener {
+            showColorPaletteDialog(getString(R.string.color_card_text_label), colorCardText) { selected ->
+                colorCardText = selected
+                updateColorPreview(colorCardTextPreview, colorCardText)
                 saveColorsFromState()
             }
         }
@@ -320,7 +342,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
             colorBackground = WallpaperSettings.DEFAULT_COLOR_BACKGROUND
             colorPanel = WallpaperSettings.DEFAULT_COLOR_PANEL
             colorHeader = WallpaperSettings.DEFAULT_COLOR_HEADER
+            colorHeaderText = WallpaperSettings.DEFAULT_COLOR_HEADER_TEXT
             colorCard = WallpaperSettings.DEFAULT_COLOR_CARD
+            colorCardText = WallpaperSettings.DEFAULT_COLOR_CARD_TEXT
             colorAccent = WallpaperSettings.DEFAULT_COLOR_ACCENT
             colorDueToday = WallpaperSettings.DEFAULT_COLOR_DUE_TODAY
             colorDoneCard = WallpaperSettings.DEFAULT_COLOR_DONE_CARD
@@ -353,7 +377,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
             .putString(WallpaperSettings.KEY_COLOR_BACKGROUND, colorBackground)
             .putString(WallpaperSettings.KEY_COLOR_PANEL, colorPanel)
             .putString(WallpaperSettings.KEY_COLOR_HEADER, colorHeader)
+            .putString(WallpaperSettings.KEY_COLOR_HEADER_TEXT, colorHeaderText)
             .putString(WallpaperSettings.KEY_COLOR_CARD, colorCard)
+            .putString(WallpaperSettings.KEY_COLOR_CARD_TEXT, colorCardText)
             .putString(WallpaperSettings.KEY_COLOR_ACCENT, colorAccent)
             .putString(WallpaperSettings.KEY_COLOR_DUE_TODAY, colorDueToday)
             .putString(WallpaperSettings.KEY_COLOR_DONE_CARD, colorDoneCard)
@@ -366,7 +392,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
         updateColorPreview(colorBackgroundPreview, colorBackground)
         updateColorPreview(colorPanelPreview, colorPanel)
         updateColorPreview(colorHeaderPreview, colorHeader)
+        updateColorPreview(colorHeaderTextPreview, colorHeaderText)
         updateColorPreview(colorCardPreview, colorCard)
+        updateColorPreview(colorCardTextPreview, colorCardText)
         updateColorPreview(colorAccentPreview, colorAccent)
         updateColorPreview(colorDueTodayPreview, colorDueToday)
         updateColorPreview(colorDoneCardPreview, colorDoneCard)

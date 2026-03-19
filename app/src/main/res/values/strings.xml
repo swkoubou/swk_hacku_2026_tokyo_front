@@ -18,7 +18,9 @@
     <string name="color_background_label">背景色</string>
     <string name="color_panel_label">パネル色</string>
     <string name="color_header_label">ヘッダー色</string>
+    <string name="color_header_text_label">ヘッダーフォント色</string>
     <string name="color_card_label">カード色</string>
+    <string name="color_card_text_label">カード内フォント色</string>
     <string name="color_accent_label">アクセント色</string>
     <string name="color_due_today_label">当日期限の強調色</string>
     <string name="color_done_card_label">完了カード色</string>
